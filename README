@@ -11,5 +11,11 @@ To set up you'll need to do a few things, if you're interested.
    It is literally one command..SUPER easy.  
    "git clone git@github.com:aeggum12/537_P5.git" and you have it all!
 
+Some of the git commands that may be useful:
+  - 'git add .' -- need to use this when you add a file that you want git to have.
+  - 'git commit -am MESSAGE'  -- commits the code, you give a message
+  - 'git push origin master'  -- pushes all committed code to github (any changes)
+  - 'git pull origin master'  -- pulls all code from github (any changes)
+
 
 We will have to set up another 'library', though I am not sure what this might mean this time around.  (libmfs.so)
