@@ -2,5 +2,11 @@ This is the repository for CS 537 P5.
 Spring 2012.
 
 I have everything set up on github.  Seems like that may make this a bit easier to deal with as a whole.
+To set up you'll need to do a few things, if you're interested.
+1. Make a github account
+2. Do the set up process, found here: http://help.github.com/linux-set-up-git/
+    --> CS already has git installed, but you'll have to do the other stuff
+3. I'll add you to the project
+4. Fork this repository anywhere you have git (like CS!) http://help.github.com/fork-a-repo/
 
 We will have to set up another 'library', though I am not sure what this might mean this time around.  (libmfs.so)
