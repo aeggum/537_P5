@@ -7,6 +7,9 @@ To set up you'll need to do a few things, if you're interested.
 2. Do the set up process, found here: http://help.github.com/linux-set-up-git/
     --> CS already has git installed, but you'll have to do the other stuff
 3. I'll add you to the project
-4. Fork this repository anywhere you have git (like CS!) http://help.github.com/fork-a-repo/
+4. Fork this repository anywhere you have git (like CS!) http://help.github.com/fork-a-repo/  
+   It is literally one command..SUPER easy.  
+   "git clone git@github.com:aeggum12/537_P5.git" and you have it all!
+
 
 We will have to set up another 'library', though I am not sure what this might mean this time around.  (libmfs.so)
