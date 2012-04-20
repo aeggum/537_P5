@@ -322,6 +322,8 @@ bmap(struct inode *ip, uint bn)
   uint addr, *a;
   struct buf *bp;
 
+  //TODO: Will have to change in some way when addresses are dealt with
+
   if(bn < NDIRECT){
     if((addr = ip->addrs[bn]) == 0)
       ip->addrs[bn] = addr = balloc(ip->dev);
@@ -355,6 +357,8 @@ itrunc(struct inode *ip)
   int i, j;
   struct buf *bp;
   uint *a;
+
+  //TODO: This will have to change, as well
 
   for(i = 0; i < NDIRECT; i++){
     if(ip->addrs[i]){
@@ -435,6 +439,7 @@ writei(struct inode *ip, char *src, uint off, uint n)
   if(off + n > MAXFILE*BSIZE)
     n = MAXFILE*BSIZE - off;
 
+  //"does the 'work'" - remzi
   for(tot=0; tot<n; tot+=m, off+=m, src+=m){
     bp = bread(ip->dev, bmap(ip, off/BSIZE));
     m = min(n - tot, BSIZE - off%BSIZE);
