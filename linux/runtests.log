@@ -1,0 +1,501 @@
+
+**********************************************************************
+
+Test build
+build project using make
+
+**********************************************************************
+make clean
+rm -rf libmfs.so client server
+make
+gcc -shared -fPIC -ggdb -o libmfs.so mfs.c udp.c
+gcc -o server server.c lfs.c udp.c
+
+
+test build PASSED
+ (build project using make)
+ file 'server.o' exists after make clean, removing
+ file 'udp.o' exists after make clean, removing
+
+
+**********************************************************************
+
+Test shutdown
+init server and client then call shutdown
+
+**********************************************************************
+test shutdown FAILED
+
+
+test shutdown FAILED
+ (init server and client then call shutdown)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test creat
+creat a file and check with lookup
+
+**********************************************************************
+test creat FAILED
+
+
+test creat FAILED
+ (creat a file and check with lookup)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test write
+write then read one block
+
+**********************************************************************
+test write FAILED
+
+
+test write FAILED
+ (write then read one block)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test stat
+stat a regular file
+
+**********************************************************************
+test stat FAILED
+
+
+test stat FAILED
+ (stat a regular file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test overwrite
+overwrite a block
+
+**********************************************************************
+test overwrite FAILED
+
+
+test overwrite FAILED
+ (overwrite a block)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test maxfile
+write largest possible file
+
+**********************************************************************
+test maxfile FAILED
+
+
+test maxfile FAILED
+ (write largest possible file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test maxfile2
+write more blocks than possible
+
+**********************************************************************
+test maxfile2 FAILED
+
+
+test maxfile2 FAILED
+ (write more blocks than possible)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test sparse
+write first and last block
+
+**********************************************************************
+test sparse FAILED
+
+
+test sparse FAILED
+ (write first and last block)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test stat2
+stat a sparse file
+
+**********************************************************************
+test stat2 FAILED
+
+
+test stat2 FAILED
+ (stat a sparse file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test dir1
+check root for dot entries
+
+**********************************************************************
+test dir1 FAILED
+
+
+test dir1 FAILED
+ (check root for dot entries)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test dir2
+create a new directory and check it
+
+**********************************************************************
+test dir2 FAILED
+
+
+test dir2 FAILED
+ (create a new directory and check it)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test baddir
+try to create a file with a file parent inode
+
+**********************************************************************
+test baddir FAILED
+
+
+test baddir FAILED
+ (try to create a file with a file parent inode)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test baddir2
+try to lookup a file with a file parent inode
+
+**********************************************************************
+test baddir2 FAILED
+
+
+test baddir2 FAILED
+ (try to lookup a file with a file parent inode)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test unlink
+unlink a file
+
+**********************************************************************
+test unlink FAILED
+
+
+test unlink FAILED
+ (unlink a file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test unlink2
+unlink a directory
+
+**********************************************************************
+test unlink2 FAILED
+
+
+test unlink2 FAILED
+ (unlink a directory)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test empty
+unlink a non-empty directory
+
+**********************************************************************
+test empty FAILED
+
+
+test empty FAILED
+ (unlink a non-empty directory)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test name
+name too long
+
+**********************************************************************
+test name FAILED
+
+
+test name FAILED
+ (name too long)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test persist
+restart server after creating a file
+
+**********************************************************************
+test persist FAILED
+
+
+test persist FAILED
+ (restart server after creating a file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test drop
+drop every other packet sent by client
+
+**********************************************************************
+test drop FAILED
+make clean
+rm -rf libmfs.so client server
+make
+gcc -shared -fPIC -ggdb -o libmfs.so mfs.c udp.c
+gcc -o server server.c lfs.c udp.c
+
+
+test drop FAILED
+ (drop every other packet sent by client)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test bigdir
+create a directory with max number of files
+
+**********************************************************************
+test bigdir FAILED
+
+
+test bigdir FAILED
+ (create a directory with max number of files)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test bigdir2
+create a directory with more files than possible
+
+**********************************************************************
+test bigdir2 FAILED
+
+
+test bigdir2 FAILED
+ (create a directory with more files than possible)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test deep
+create many deeply nested directories
+
+**********************************************************************
+test deep FAILED
+
+
+test deep FAILED
+ (create many deeply nested directories)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test complex
+a long sequence of creats and writes followed by a check
+
+**********************************************************************
+test complex FAILED
+
+
+test complex FAILED
+ (a long sequence of creats and writes followed by a check)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test complex2
+a long sequence of creats and writes followed by a check
+
+**********************************************************************
+test complex2 FAILED
+
+
+test complex2 FAILED
+ (a long sequence of creats and writes followed by a check)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test persist2
+restart server after creating many dirs and files
+
+**********************************************************************
+test persist2 FAILED
+
+
+test persist2 FAILED
+ (restart server after creating many dirs and files)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+
+**********************************************************************
+
+Test free
+check that inodes and direcrtory entries are freed
+
+**********************************************************************
+test free FAILED
+
+
+test free FAILED
+ (check that inodes and direcrtory entries are freed)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+**********************************************************************
+Summary:
+test build PASSED
+ (build project using make)
+ file 'server.o' exists after make clean, removing
+ file 'udp.o' exists after make clean, removing
+
+test shutdown FAILED
+ (init server and client then call shutdown)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test creat FAILED
+ (creat a file and check with lookup)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test write FAILED
+ (write then read one block)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test stat FAILED
+ (stat a regular file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test overwrite FAILED
+ (overwrite a block)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test maxfile FAILED
+ (write largest possible file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test maxfile2 FAILED
+ (write more blocks than possible)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test sparse FAILED
+ (write first and last block)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test stat2 FAILED
+ (stat a sparse file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test dir1 FAILED
+ (check root for dot entries)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test dir2 FAILED
+ (create a new directory and check it)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test baddir FAILED
+ (try to create a file with a file parent inode)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test baddir2 FAILED
+ (try to lookup a file with a file parent inode)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test unlink FAILED
+ (unlink a file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test unlink2 FAILED
+ (unlink a directory)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test empty FAILED
+ (unlink a non-empty directory)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test name FAILED
+ (name too long)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test persist FAILED
+ (restart server after creating a file)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test drop FAILED
+ (drop every other packet sent by client)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test bigdir FAILED
+ (create a directory with max number of files)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test bigdir2 FAILED
+ (create a directory with more files than possible)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test deep FAILED
+ (create many deeply nested directories)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test complex FAILED
+ (a long sequence of creats and writes followed by a check)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test complex2 FAILED
+ (a long sequence of creats and writes followed by a check)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test persist2 FAILED
+ (restart server after creating many dirs and files)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+test free FAILED
+ (check that inodes and direcrtory entries are freed)
+ libmfs should export fucntion 'MFS_Shutdown'
+
+Passed 1 of 27 tests.
+Overall 1 of 27
