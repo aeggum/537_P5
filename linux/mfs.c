@@ -1,12 +1,25 @@
 #include "mfs.h"
+#include <stdbool.h>
 #include <string.h>
 #include "udp.h"
+
+//global variables that will be initialized in MFS_INIT
+bool init_done = false;
+char *server_name;
+int server_port;
 
 /*
  * Takes a host nome and a part number and uses those to find
  * the server exporting the file system. 
  */
 int MFS_Init(char *hostname, int port) {
+  if (hostname == NULL || (port < 0))
+    return -1;
+  
+  server_name = malloc(sizeof(hostname + 1)); //+1 needed for null terminator
+  strcpy(server_name, hostname);
+  server_port = port;
+  init_done = true;
   return 0;
 }
 
