@@ -1,10 +1,10 @@
 all: libmfs.so server
 
 libmfs.so:
-	gcc -shared -fPIC -ggdb -o libmfs.so mfs.c udp.c
+	gcc -shared -fpic -g -o libmfs.so mfs.c udp.c
 
 client: libmfs.so
-	gcc -ggdb -L. -lmfs -o client client.c
+	gcc -g -L. -lmfs -o client client.c
 
 server: 
 	gcc -o server server.c lfs.c udp.c
