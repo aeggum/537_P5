@@ -8,6 +8,15 @@ bool init_done = false;
 char *server_name;
 int server_port;
 
+int length_check(char* name) {
+  //length should be 28, so 27 not counting null termination
+  if (strlen(name) > 27) {   
+    return -1;
+  }
+
+  return 0;
+}
+
 /*
  * Takes a host nome and a part number and uses those to find
  * the server exporting the file system. 
@@ -29,6 +38,9 @@ int MFS_Init(char *hostname, int port) {
  * up the entry name in it.  The inode number of name is returned. 
  */
 int MFS_Lookup(int pinum, char *name) {
+  if (!init_done) return -1;              //init not yet called
+  if (length_check(name) < 0) return -1;  //name too long
+  if (name == NULL) return -1;
   return 0;
 }
 
@@ -37,6 +49,7 @@ int MFS_Lookup(int pinum, char *name) {
  * Returns some information about the file specified by inum. 
  */
 int MFS_Stat(int inum, MFS_Stat_t *m) {
+  if (!init_done) return -1;
   return 0;
 }
 
@@ -46,6 +59,7 @@ int MFS_Stat(int inum, MFS_Stat_t *m) {
  * block. 
  */
 int MFS_Write(int inum, char *buffer, int block) {
+  if (!init_done) return -1;
   return 0;
 }
 
@@ -56,6 +70,7 @@ int MFS_Write(int inum, char *buffer, int block) {
  * data in the format specified by MFS_DirEnt_t. 
  */
 int MFS_Read(int inum, char *buffer, int block) {
+  if (!init_done) return -1;
   return 0;
 }
 
@@ -66,6 +81,8 @@ int MFS_Read(int inum, char *buffer, int block) {
  * NOTE: If name already exists, return success (why?)
  */
 int MFS_Creat(int pinum, int type, char *name) {
+  if (!init_done) return -1;
+  if (length_check < 0) return -1;
   return 0;
 }
 
@@ -75,6 +92,8 @@ int MFS_Creat(int pinum, int type, char *name) {
  * NOTE: If the name doesn't exist, it is not a failure (why?)
  */
 int MFS_Unlink(int pinum, char *name) {
+  if (!init_done) return -1;
+  if (length_check < 0) return -1;
   return 0;
 }
 
@@ -84,5 +103,6 @@ int MFS_Unlink(int pinum, char *name) {
  * Does so by calling exit(0).  Mostly used for testing purposes. 
  */
 int MFS_Shutdown() {
+  if (!init_done) return -1;
   return 0;
 }
