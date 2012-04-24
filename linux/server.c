@@ -27,3 +27,17 @@ main(int argc, char *argv[])
 }
 
 
+//TODO: I think this method is something like we will need.  
+//Call a method to open a port and keep it open, listening.
+void listenOnServer(int port_num) {
+  int sd = UDP_Open(port_num);
+  if (sd < 0) {
+    printf("Error in opening a socket on port_num %d\n", port_num);
+    exit(-1);
+  }
+
+  printf("starting the server (listening) in server.c\n");
+  while(1) {
+    
+  }
+}
