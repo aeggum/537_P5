@@ -20,20 +20,24 @@ typedef struct __MFS_DirEnt_t {
 
 //can use an enum to tell which method we will be using
 enum method {
-  init, 
-  lookup, 
-  stat, 
-  write,
-  read,
-  creat,
-  unlink,
-  shutdown
+  INIT, 
+  LOOKUP, 
+  STAT, 
+  WRITE,
+  READ,
+  CREAT,
+  UNLINK,
+  SHUTDOWN
 };
 
 typedef struct __MFS_Packet_t {
-  message message;
+  enum method method;
   MFS_Stat_t stat;
   int inum;
+  int type;
+  int block;
+  char name[28];
+  char buffer[MFS_BLOCK_SIZE];
   
 } MFS_Packet_t;
 
