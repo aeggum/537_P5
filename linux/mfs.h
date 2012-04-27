@@ -18,6 +18,25 @@ typedef struct __MFS_DirEnt_t {
 } MFS_DirEnt_t;
 
 
+//can use an enum to tell which method we will be using
+enum method {
+  init, 
+  lookup, 
+  stat, 
+  write,
+  read,
+  creat,
+  unlink,
+  shutdown
+};
+
+typedef struct __MFS_Packet_t {
+  message message;
+  MFS_Stat_t stat;
+  int inum;
+  
+} MFS_Packet_t;
+
 int MFS_Init(char *hostname, int port);
 int MFS_Lookup(int pinum, char *name);
 int MFS_Stat(int inum, MFS_Stat_t *m);
