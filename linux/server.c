@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "udp.h"
+#include "mfs.h"
 
 #define BUFFER_SIZE (4096)
 
@@ -38,6 +39,34 @@ void listenOnServer(int port_num) {
 
   printf("starting the server (listening) in server.c\n");
   while(1) {
+    //do some stuff
     
+    MFS_Packet_t packet;
+    switch(packet.method) {
+    case INIT:
+      //
+      break;
+    case LOOKUP:
+      //
+      break;
+    case STAT:
+      //
+      break;
+    case WRITE:
+      //
+      break;
+    case READ:
+      //
+      break;
+    case CREAT:
+      // 
+      break;
+    case UNLINK: 
+      //
+      break;
+    case SHUTDOWN:
+      //
+      break;
+    }
   }
 }
