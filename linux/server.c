@@ -48,17 +48,16 @@ void listenOnServer(int port_num) {
 
   printf("starting the server (listening) in server.c\n");
   while(1) {
-    
     struct sockaddr_in s;
     MFS_Packet_t packet;
     int rc = UDP_Read(sd, &s, (char*)&packet, sizeof(MFS_Packet_t));
-    if (rc < 0) 
-      return;
+    if (rc <= 0) 
+      continue;
     else {
       MFS_Packet_t response;
       
       switch(packet.method) {
-	printf("inside the switch statement\n");
+	
       case INIT:
 	//
 	break;
@@ -81,9 +80,14 @@ void listenOnServer(int port_num) {
 	//
 	break;
       case SHUTDOWN:
-	shutdown_server();
+	//shutdown_server();
 	break;
       }
+
+      response.method = RESPONSE;
+      rc = UDP_Write(sd, &s, (char*)&response, sizeof(MFS_Packet_t));
+      if (packet.method == SHUTDOWN)
+	shutdown_server();
     }
   }
 }

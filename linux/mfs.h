@@ -27,7 +27,8 @@ enum method {
   READ,
   CREAT,
   UNLINK,
-  SHUTDOWN
+  SHUTDOWN,
+  RESPONSE
 };
 
 typedef struct __MFS_Packet_t {

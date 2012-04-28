@@ -83,7 +83,17 @@ int MFS_Read(int inum, char *buffer, int block) {
 int MFS_Creat(int pinum, int type, char *name) {
   if (!init_done) return -1;
   if (length_check < 0) return -1;
-  return 0;
+  
+  MFS_Packet_t sent, response;
+  sent.inum = pinum;
+  sent.type = type;
+  sent.method = CREAT;
+  
+  strcpy(sent.name, name);
+  if (sendPacket(server_name, server_port, &sent, &response) < 0)
+    return -1;
+
+  return response.inum;
 }
 
 

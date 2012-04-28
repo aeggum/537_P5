@@ -34,11 +34,13 @@ int start_server(int port, char* path) {
     if (fd == -1) return -1;
     next_block = CRSIZE;
     
+    
     int i;
     for(i = 0; i < MAXINODES; i++) {
       imap[i] = -1;      //sets the imap to -1 on init
     }
-    
+        
+
     lseek(fd, 0, SEEK_SET);
     write(fd, imap, sizeof(int)*MAXINODES);
     write(fd, &next_block, sizeof(int));
@@ -49,7 +51,8 @@ int start_server(int port, char* path) {
     root_node.type = MFS_DIRECTORY;
     root_node.dp_used[0] = 1;
     root_node.dpointers[0] = next_block;
-    
+        
+
     for (i = 1; i < 14; i++) {
       root_node.dp_used[i] = 0;
       root_node.dpointers[i] = -1;
@@ -65,6 +68,7 @@ int start_server(int port, char* path) {
       base_block.inums[i] = -1;
       strcpy(base_block.names[i], "DNE\0");
     }
+    
 
     //write the base block
     lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
@@ -87,6 +91,7 @@ int start_server(int port, char* path) {
     read(fd, &next_block, sizeof(int));
   }
   
+  printf("calling to listen on port: %d\n", port);
   listenOnServer(port);
   return 0;
 }
