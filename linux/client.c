@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.c>
 #include "udp.h"
+#include "mfs.h"
 
 #define BUFFER_SIZE (4096)
 char buffer[BUFFER_SIZE];
@@ -8,31 +9,39 @@ char buffer[BUFFER_SIZE];
 int
 main(int argc, char *argv[])
 {
+  printf("inside of client.c\n");
+  
   //expecting 3 args: server [portnum] [file-system image]
   if (argc != 3) {
     printf("Usage: server [portnum] [file-system image]\n");
     exit(-1);
   }
 
-  int port_num = atoi(argv[1]);
-  char* fs_image = argv[2];
-
-  //now we would probably do a call to start the server
-  //which would do some of the stuff that is below...
-
-
-  //going to throw in some psuedocode below: 
+  int port_num = atoi(argv[2]);  //as mentioned in mfs.c
+  char* host = argv[1];
   
-  //check if fs already exists - (open(fs_image, O_RDWR) == -1) would mean it doesn't
-  //    if it doesn't, create it - open(fs_image, O_RDWR|O_CREAT|O_TRUNC, S_IRWXU); ..
-  //         create checkpont region - ???
-  //         create inode map, single root directory with '.' and '..' entries
-  //              root inode should be value 0
-  //    if it does exist already, read in checkpoint region & inode  map
-
-  //maybe it would be at this point that we do some of the stuff below, with port_num?
-
-  int sd = UDP_Open(20000);
+  MFS_Init(host, port_num);
+  MFS_Creat(0, MFS_DIRECTORY, "TestDir");
+  int inode = MFS_Lookup(0, "TestDir");
+  int i;
+  for(i = 0; i < 1800; ++i) {
+      char buffer[2000];
+      sprintf(buffer, "file_%d", i);
+      int ret = MFS_Creat(inode, MFS_REGULAR_FILE, buffer);
+      if(ret == 0) {
+	printf("Successfully created: %s", buffer);
+      }
+      else {
+	printf("Failed to create: %s", buffer);
+      }
+    }
+  
+  
+  //TODO: More to set-up.
+  MFS_Shutdown();
+  return -1;
+    
+  /*int sd = UDP_Open(20000);
   if (sd < 0) {
     printf("Problem in opening the socket on port %d\n", port_num);
     exit(-1);
@@ -52,7 +61,7 @@ main(int argc, char *argv[])
     printf("CLIENT:: read %d bytes (message: '%s')\n", rc, buffer);
   }
   
-  return 0;
+  return 0;*/
 }
 
 

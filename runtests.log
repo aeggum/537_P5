@@ -1,0 +1,518 @@
+
+**********************************************************************
+
+Test build
+build project using make
+
+**********************************************************************
+make clean
+make: *** No rule to make target `clean'.  Stop.
+test build FAILED
+make
+make: *** No targets specified and no makefile found.  Stop.
+test build FAILED
+test build FAILED
+test build FAILED
+make: *** No rule to make target `libmfs.so'.  Stop.
+
+
+test build FAILED
+ (build project using make)
+ make clean failed
+ make failed (error 2)
+ required file 'libmfs.so' does not exist after make
+ required file 'server' does not exist after make
+
+
+**********************************************************************
+
+Test shutdown
+init server and client then call shutdown
+
+**********************************************************************
+test shutdown FAILED
+
+
+test shutdown FAILED
+ (init server and client then call shutdown)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test creat
+creat a file and check with lookup
+
+**********************************************************************
+test creat FAILED
+
+
+test creat FAILED
+ (creat a file and check with lookup)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test write
+write then read one block
+
+**********************************************************************
+test write FAILED
+
+
+test write FAILED
+ (write then read one block)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test stat
+stat a regular file
+
+**********************************************************************
+test stat FAILED
+
+
+test stat FAILED
+ (stat a regular file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test overwrite
+overwrite a block
+
+**********************************************************************
+test overwrite FAILED
+
+
+test overwrite FAILED
+ (overwrite a block)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test maxfile
+write largest possible file
+
+**********************************************************************
+test maxfile FAILED
+
+
+test maxfile FAILED
+ (write largest possible file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test maxfile2
+write more blocks than possible
+
+**********************************************************************
+test maxfile2 FAILED
+
+
+test maxfile2 FAILED
+ (write more blocks than possible)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test sparse
+write first and last block
+
+**********************************************************************
+test sparse FAILED
+
+
+test sparse FAILED
+ (write first and last block)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test stat2
+stat a sparse file
+
+**********************************************************************
+test stat2 FAILED
+
+
+test stat2 FAILED
+ (stat a sparse file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test dir1
+check root for dot entries
+
+**********************************************************************
+test dir1 FAILED
+
+
+test dir1 FAILED
+ (check root for dot entries)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test dir2
+create a new directory and check it
+
+**********************************************************************
+test dir2 FAILED
+
+
+test dir2 FAILED
+ (create a new directory and check it)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test baddir
+try to create a file with a file parent inode
+
+**********************************************************************
+test baddir FAILED
+
+
+test baddir FAILED
+ (try to create a file with a file parent inode)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test baddir2
+try to lookup a file with a file parent inode
+
+**********************************************************************
+test baddir2 FAILED
+
+
+test baddir2 FAILED
+ (try to lookup a file with a file parent inode)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test unlink
+unlink a file
+
+**********************************************************************
+test unlink FAILED
+
+
+test unlink FAILED
+ (unlink a file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test unlink2
+unlink a directory
+
+**********************************************************************
+test unlink2 FAILED
+
+
+test unlink2 FAILED
+ (unlink a directory)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test empty
+unlink a non-empty directory
+
+**********************************************************************
+test empty FAILED
+
+
+test empty FAILED
+ (unlink a non-empty directory)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test name
+name too long
+
+**********************************************************************
+test name FAILED
+
+
+test name FAILED
+ (name too long)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test persist
+restart server after creating a file
+
+**********************************************************************
+test persist FAILED
+
+
+test persist FAILED
+ (restart server after creating a file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test drop
+drop every other packet sent by client
+
+**********************************************************************
+test drop FAILED
+make clean
+make: *** No rule to make target `clean'.  Stop.
+test drop FAILED
+make
+make: *** No targets specified and no makefile found.  Stop.
+test drop FAILED
+test drop FAILED
+make: *** No rule to make target `server'.  Stop.
+
+
+test drop FAILED
+ (drop every other packet sent by client)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+ make clean failed
+ make failed (error 2)
+ required file 'server' does not exist after make
+
+
+**********************************************************************
+
+Test bigdir
+create a directory with max number of files
+
+**********************************************************************
+test bigdir FAILED
+
+
+test bigdir FAILED
+ (create a directory with max number of files)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test bigdir2
+create a directory with more files than possible
+
+**********************************************************************
+test bigdir2 FAILED
+
+
+test bigdir2 FAILED
+ (create a directory with more files than possible)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test deep
+create many deeply nested directories
+
+**********************************************************************
+test deep FAILED
+
+
+test deep FAILED
+ (create many deeply nested directories)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test complex
+a long sequence of creats and writes followed by a check
+
+**********************************************************************
+test complex FAILED
+
+
+test complex FAILED
+ (a long sequence of creats and writes followed by a check)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test complex2
+a long sequence of creats and writes followed by a check
+
+**********************************************************************
+test complex2 FAILED
+
+
+test complex2 FAILED
+ (a long sequence of creats and writes followed by a check)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test persist2
+restart server after creating many dirs and files
+
+**********************************************************************
+test persist2 FAILED
+
+
+test persist2 FAILED
+ (restart server after creating many dirs and files)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+
+**********************************************************************
+
+Test free
+check that inodes and direcrtory entries are freed
+
+**********************************************************************
+test free FAILED
+
+
+test free FAILED
+ (check that inodes and direcrtory entries are freed)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+**********************************************************************
+Summary:
+test build FAILED
+ (build project using make)
+ make clean failed
+ make failed (error 2)
+ required file 'libmfs.so' does not exist after make
+ required file 'server' does not exist after make
+
+test shutdown FAILED
+ (init server and client then call shutdown)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test creat FAILED
+ (creat a file and check with lookup)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test write FAILED
+ (write then read one block)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test stat FAILED
+ (stat a regular file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test overwrite FAILED
+ (overwrite a block)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test maxfile FAILED
+ (write largest possible file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test maxfile2 FAILED
+ (write more blocks than possible)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test sparse FAILED
+ (write first and last block)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test stat2 FAILED
+ (stat a sparse file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test dir1 FAILED
+ (check root for dot entries)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test dir2 FAILED
+ (create a new directory and check it)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test baddir FAILED
+ (try to create a file with a file parent inode)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test baddir2 FAILED
+ (try to lookup a file with a file parent inode)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test unlink FAILED
+ (unlink a file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test unlink2 FAILED
+ (unlink a directory)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test empty FAILED
+ (unlink a non-empty directory)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test name FAILED
+ (name too long)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test persist FAILED
+ (restart server after creating a file)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test drop FAILED
+ (drop every other packet sent by client)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+ make clean failed
+ make failed (error 2)
+ required file 'server' does not exist after make
+
+test bigdir FAILED
+ (create a directory with max number of files)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test bigdir2 FAILED
+ (create a directory with more files than possible)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test deep FAILED
+ (create many deeply nested directories)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test complex FAILED
+ (a long sequence of creats and writes followed by a check)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test complex2 FAILED
+ (a long sequence of creats and writes followed by a check)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test persist2 FAILED
+ (restart server after creating many dirs and files)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+test free FAILED
+ (check that inodes and direcrtory entries are freed)
+ Unexcpected exception /tmp/tmpovelFs/xv6/libmfs.so: cannot open shared object file: No such file or directory
+
+Passed 0 of 27 tests.
+Overall 0 of 27

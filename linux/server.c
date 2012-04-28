@@ -7,7 +7,18 @@
 int
 main(int argc, char *argv[])
 {
-  int sd = UDP_Open(10000);
+  if (argc != 3) {
+    printf("Usage: server [portnum] [file-system-image]\n");
+    exit(-1);
+  }
+
+  int port_num = atoi(argv[1]);
+  char* fs_image = argv[2];
+  start_server(port_num, fs_image);
+  
+  return 0;
+  
+  /*int sd = UDP_Open(10000);
   assert(sd > -1);
 
   printf("waiting in loop\n");
@@ -22,51 +33,57 @@ main(int argc, char *argv[])
       sprintf(reply, "reply");
       rc = UDP_Write(sd, &s, reply, BUFFER_SIZE);
     }
-  }
-  
-  return 0;
+    }*/
 }
 
 
-//TODO: I think this method is something like we will need.  
+//TODO I think this method is something like we will need.  
 //Call a method to open a port and keep it open, listening.
 void listenOnServer(int port_num) {
   int sd = UDP_Open(port_num);
-  if (sd < 0) {
+  if (sd < 0) {   //TODO: It's failing here, so set-up isn't right
     printf("Error in opening a socket on port_num %d\n", port_num);
     exit(-1);
   }
 
   printf("starting the server (listening) in server.c\n");
   while(1) {
-    //do some stuff
     
+    struct sockaddr_in s;
     MFS_Packet_t packet;
-    switch(packet.method) {
-    case INIT:
-      //
-      break;
-    case LOOKUP:
-      //
-      break;
-    case STAT:
-      //
-      break;
-    case WRITE:
-      //
-      break;
-    case READ:
-      //
-      break;
-    case CREAT:
-      // 
-      break;
-    case UNLINK: 
-      //
-      break;
-    case SHUTDOWN:
-      //
-      break;
+    int rc = UDP_Read(sd, &s, (char*)&packet, sizeof(MFS_Packet_t));
+    if (rc < 0) 
+      return;
+    else {
+      MFS_Packet_t response;
+      
+      switch(packet.method) {
+	printf("inside the switch statement\n");
+      case INIT:
+	//
+	break;
+      case LOOKUP:
+	//
+	break;
+      case STAT:
+	//
+	break;
+      case WRITE:
+	//
+	break;
+      case READ:
+	//
+	break;
+      case CREAT:
+	// 
+	break;
+      case UNLINK: 
+	//
+	break;
+      case SHUTDOWN:
+	shutdown_server();
+	break;
+      }
     }
   }
 }
