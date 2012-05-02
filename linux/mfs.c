@@ -41,7 +41,16 @@ int MFS_Lookup(int pinum, char *name) {
   if (!init_done) return -1;              //init not yet called
   if (length_check(name) < 0) return -1;  //name too long
   if (name == NULL) return -1;
-  return 0;
+  
+  MFS_Packet_t send, receive;
+  send.inum = pinum;
+  strcpy(send.name, name);
+  send.method = LOOKUP;
+  int rc = SendPacket(server_name, server_port, &send, &receive);
+  if (rc < 0)
+    return -1;
+  
+  return receive.inum;
 }
 
 
@@ -50,6 +59,17 @@ int MFS_Lookup(int pinum, char *name) {
  */
 int MFS_Stat(int inum, MFS_Stat_t *m) {
   if (!init_done) return -1;
+  
+  MFS_Packet_t send, receive;
+  send.inum = inum;
+  send.method = STAT;
+  
+  int rc = SendPacket(server_name, server_port, &send, &receive);
+  if (rc < 0) 
+    return -1;
+
+  //now copy the contents from the received packet into m
+  memcpy(m, &(receive.stat), sizeof(MFS_Stat_t));
   return 0;
 }
 
@@ -60,6 +80,18 @@ int MFS_Stat(int inum, MFS_Stat_t *m) {
  */
 int MFS_Write(int inum, char *buffer, int block) {
   if (!init_done) return -1;
+  
+  MFS_Packet_t send, receive;
+  send.method = WRITE;
+  send.inum = inum;
+  memcpy(send.buffer, buffer, 4096);
+  send.block = block;
+
+  int rc = SendPacket(server_name, server_port, &send, &receive);
+  if (rc < 0) 
+    return -1;
+  
+  //return 0 on success, -1 on failure
   return 0;
 }
 
@@ -71,6 +103,18 @@ int MFS_Write(int inum, char *buffer, int block) {
  */
 int MFS_Read(int inum, char *buffer, int block) {
   if (!init_done) return -1;
+
+  MFS_Packet_t send, receive;
+  send.method = READ;
+  send.inum = inum;
+  memcpy(send.buffer, buffer, 4096);
+  send.block = block;
+  
+  int rc = SendPacket(server_name, server_port, &send, &receive);
+  if (rc < 0) 
+    return -1;
+  
+  //TODO: something to deal with returning either directory or non-directories.
   return 0;
 }
 
@@ -84,16 +128,16 @@ int MFS_Creat(int pinum, int type, char *name) {
   if (!init_done) return -1;
   if (length_check < 0) return -1;
   
-  MFS_Packet_t sent, response;
-  sent.inum = pinum;
-  sent.type = type;
-  sent.method = CREAT;
+  MFS_Packet_t send, receive;
+  send.inum = pinum;
+  send.type = type;
+  send.method = CREAT;
   
-  strcpy(sent.name, name);
-  if (sendPacket(server_name, server_port, &sent, &response) < 0)
+  strcpy(send.name, name);
+  if (sendPacket(server_name, server_port, &send, &receive) < 0)
     return -1;
 
-  return response.inum;
+  return receive.inum;
 }
 
 
