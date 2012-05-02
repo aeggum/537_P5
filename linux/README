@@ -1,2 +1,8 @@
-So I've been going through and setting up a lot of stuff but no tests are being passed as of yet.  I've written a bunch of code, some that set up the lfs, with the root directory and parent structure, and then some other stuff as well.  
+I had some time to burn so I went through and added to the rest of mfs.c.  
+Most of the file is complete now, but there are a few bits that I wasn't able to get to.  (Such as MFS_Read(), returning the data in the right format).
+
+It looks like the majority of the work is now onto LFS.c.  That will be plenty of fun...
+
+No tests are passing, last time I ran them.  The last couple take forever so I wouldn't recommend just testing all everytime. 
+
 
