@@ -148,6 +148,17 @@ int MFS_Creat(int pinum, int type, char *name) {
 int MFS_Unlink(int pinum, char *name) {
   if (!init_done) return -1;
   if (length_check < 0) return -1;
+  
+  MFS_Packet_t send, receive;
+  send.method = UNLINK;
+  send.inum = pinum;
+  strcpy(send.name, name);
+
+  int rc = SendPacket(server_name, server_port, send, receive);
+  if (rc < 0)
+    return -1;
+
+  //return 0 on success, -1 on failure (as above)
   return 0;
 }
 
@@ -158,5 +169,13 @@ int MFS_Unlink(int pinum, char *name) {
  */
 int MFS_Shutdown() {
   if (!init_done) return -1;
+  
+  MFS_Packet_t send, receive;
+  send.method = SHUTDOWN;
+  
+  int rc = SendPacket(server_name, server_port, send, receive);
+  if (rc < 0)
+    return -1;
+  
   return 0;
 }
