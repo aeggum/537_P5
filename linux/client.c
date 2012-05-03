@@ -3,6 +3,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include "udp.h"
+#include "lfs.h"
 #include "mfs.h"
 
 #define BUFFER_SIZE (4096)

@@ -54,3 +54,5 @@ while(1) {
 
 for testing:
 call MFS_ ...
+
+So it looks like we're on the right track, but we're just not quite doing things right, now I think that the problem is somewhere to do with the how the calls are aligned (and therefore either the makefiles need to change or the way the files are aligned needs to change.)

@@ -46,7 +46,7 @@ int MFS_Lookup(int pinum, char *name) {
   send.inum = pinum;
   strcpy(send.name, name);
   send.method = LOOKUP;
-  int rc = SendPacket(server_name, server_port, &send, &receive);
+  int rc = sendPacket(server_name, server_port, &send, &receive);
   if (rc < 0)
     return -1;
   
@@ -64,7 +64,7 @@ int MFS_Stat(int inum, MFS_Stat_t *m) {
   send.inum = inum;
   send.method = STAT;
   
-  int rc = SendPacket(server_name, server_port, &send, &receive);
+  int rc = sendPacket(server_name, server_port, &send, &receive);
   if (rc < 0) 
     return -1;
 
@@ -87,7 +87,7 @@ int MFS_Write(int inum, char *buffer, int block) {
   memcpy(send.buffer, buffer, 4096);
   send.block = block;
 
-  int rc = SendPacket(server_name, server_port, &send, &receive);
+  int rc = sendPacket(server_name, server_port, &send, &receive);
   if (rc < 0) 
     return -1;
   
@@ -110,7 +110,7 @@ int MFS_Read(int inum, char *buffer, int block) {
   memcpy(send.buffer, buffer, 4096);
   send.block = block;
   
-  int rc = SendPacket(server_name, server_port, &send, &receive);
+  int rc = sendPacket(server_name, server_port, &send, &receive);
   if (rc < 0) 
     return -1;
   
@@ -154,7 +154,7 @@ int MFS_Unlink(int pinum, char *name) {
   send.inum = pinum;
   strcpy(send.name, name);
 
-  int rc = SendPacket(server_name, server_port, send, receive);
+  int rc = sendPacket(server_name, server_port, send, receive);
   if (rc < 0)
     return -1;
 
@@ -173,7 +173,7 @@ int MFS_Shutdown() {
   MFS_Packet_t send, receive;
   send.method = SHUTDOWN;
   
-  int rc = SendPacket(server_name, server_port, send, receive);
+  int rc = sendPacket(server_name, server_port, send, receive);
   if (rc < 0)
     return -1;
   
