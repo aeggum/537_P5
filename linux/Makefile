@@ -1,7 +1,7 @@
 all: libmfs.so server
 
 libmfs.so:
-	gcc -shared -fpic -g -o libmfs.so mfs.c lfs.c sendPacket.c server.c udp.c
+	gcc -shared -fpic -g -o libmfs.so mfs.c lfs.c sendPacket.c udp.c
 
 client: libmfs.so
 	gcc -g -L. -lmfs -o client client.c

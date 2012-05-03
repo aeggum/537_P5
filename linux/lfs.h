@@ -22,9 +22,11 @@ typedef struct __directory {
 } directory;
 
 
-//Function prototypes
+//Function prototypes (implement in lfs.c)
 int update_CR(int inum, int fd);
 int start_server(int port, char* path);
 int shutdown_server();
-
+int lookup(int pinum, char* name);
+//int stat_server(int inum, MFS_Stat_t *m);  doesn't compile due to MFS_Stat..
 #endif
+

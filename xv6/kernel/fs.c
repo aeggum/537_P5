@@ -412,6 +412,8 @@ readi(struct inode *ip, char *dst, uint off, uint n)
   if(off + n > ip->size)
     n = ip->size - off;
 
+  //TODO
+  //this is a relavant loop for us
   for(tot=0; tot<n; tot+=m, off+=m, dst+=m){
     bp = bread(ip->dev, bmap(ip, off/BSIZE));
     m = min(n - tot, BSIZE - off%BSIZE);

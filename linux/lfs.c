@@ -96,7 +96,19 @@ int start_server(int port, char* path) {
   return 0;
 }
 
+int lookup(int pinum, char* name) {
+  //TODO
+  return 0;
+}
 
+//return -1 only if the inum doesn't exist.
+int stat_server(int inum, MFS_Stat_t *m) {
+  //return information about file given by inum
+  //...so we should get the inode related to inum, then fill in m
+  //to fill in MFS_Stat_t, there is type and size int fields only
+  
+  return 0;
+}
 
 int shutdown_server() {
   exit(0);

@@ -5,4 +5,52 @@ It looks like the majority of the work is now onto LFS.c.  That will be plenty o
 
 No tests are passing, last time I ran them.  The last couple take forever so I wouldn't recommend just testing all everytime. 
 
+client
+- relatively simple
+  init:
+    UDP_Open();
+    filling socket adr of server
+    etc.
+  MFS -> UDP message sends
+  struct message {
+  	 int type; //LOOKUP, etc.
+	 maybe one message type //parameters
+  };
+  using select() to timeout ...
+  man page ...
 
+
+server
+-> less simple
+
+-> on-disk format
+-> file system image init
+
+   disk pointer => offsets in the file-system image file
+   		=> disk address   
+
+				      x		
+   ------------------------------------------------------------------- >
+   | CR | inode map piece 0 | 1 | ... | root inode | root dir data |
+     	  0th entry: x                | addr[0]: y | "." 0, ".." 0
+
+next goal: create file in the root directory
+     new inode, update root inode, update root dir data
+     ALL TO END OF LOG
+     + piece of inode map (and update CR at some points)
+     
+after being able to create, the rest will be pretty easy. (we just need to get create)
+
+testing:
+-> don't need comm in order to test
+   server: call MFS_Lookup(), etc.
+
+while(1) {
+  recv
+  do 
+  reply
+}
+
+
+for testing:
+call MFS_ ...

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <sys/select.h>
 #include <sys/time.h>
-#include <stdlib.c>
+#include <stdlib.h>
 #include "udp.h"
 #include "mfs.h"
 

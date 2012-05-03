@@ -10,7 +10,7 @@ typedef struct __MFS_Stat_t {
   int type;   // MFS_DIRECTORY or MFS_REGULAR
   int size;   // bytes
   // note: no permissions, access times, etc.
-} MFS_Stat_t;
+  } MFS_Stat_t;
 
 typedef struct __MFS_DirEnt_t {
   char name[28];  // up to 28 bytes of name in directory (including \0)
