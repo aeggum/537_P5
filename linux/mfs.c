@@ -18,7 +18,7 @@ int length_check(char* name) {
 }
 
 /*
- * Takes a host nome and a part number and uses those to find
+ * Takes a host name and a part number and uses those to find
  * the server exporting the file system. 
  */
 int MFS_Init(char *hostname, int port) {

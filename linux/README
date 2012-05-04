@@ -1,5 +1,6 @@
 I had some time to burn so I went through and added to the rest of mfs.c.  
-Most of the file is complete now, but there are a few bits that I wasn't able to get to.  (Such as MFS_Read(), returning the data in the right format).
+Most of the file is complete now, but there are a few bits that I wasn't able to
+get to.  (Such as MFS_Read(), returning the data in the right format).
 
 It looks like the majority of the work is now onto LFS.c.  That will be plenty of fun...
 
@@ -55,4 +56,7 @@ while(1) {
 for testing:
 call MFS_ ...
 
-So it looks like we're on the right track, but we're just not quite doing things right, now I think that the problem is somewhere to do with the how the calls are aligned (and therefore either the makefiles need to change or the way the files are aligned needs to change.)
+So it looks like we're on the right track, but we're just not quite doing things
+right, now I think that the problem is somewhere to do with the how the calls are
+aligned (and therefore either the makefiles need to change or the way the files are
+aligned needs to change.)
