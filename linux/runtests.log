@@ -27,6 +27,7 @@ new port number: 31670
 inside the start_server() method
 calling to listen on port: 31670
 starting the server (listening) in server.c
+Server received SHUTDOWN packet
 
 
 test shutdown PASSED

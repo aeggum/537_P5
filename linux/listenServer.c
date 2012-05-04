@@ -27,7 +27,7 @@ void listenOnServer(int port_num) {
       
       // This switch is working now right?...
       // Going to want to do something more in each case obviously
-      switch(sentPpacacket.method) {
+      switch(sentPacket.method) {
 	
       case INIT:
         printf("Server received INIT packet\n");
@@ -66,6 +66,7 @@ void listenOnServer(int port_num) {
 
       case RESPONSE:
         // What case does this happen in? Whend does the client send response method?
+	//i don't think it ever will, it's there to keep the compiler happy.
         printf("Server received RESPONSE packet\n");
         break;
       }
@@ -73,7 +74,7 @@ void listenOnServer(int port_num) {
       response.method = RESPONSE;
       // FROM P5 desciption: "before returning a success code, the file system 
       // should always fsync() the image" --- Probably want to fsync here (or somewhere)
-      if(UDP_Write(sd, &s, (char*)&response, sizeof(MFS_Packet_t) < 0) {
+      if(UDP_Write(sd, &s, (char*)&response, sizeof(MFS_Packet_t) < 0)) {
         printf("Error sending response from server to client");
       }
       if (sentPacket.method == SHUTDOWN) {
