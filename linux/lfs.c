@@ -15,6 +15,14 @@ int next_block;        //next block in the AS to be written
 bool new;
 int fd;
 
+/**
+ * updates the checkpoint region.  as long as the inum is valid,
+ * the method will set the offset to the correct location (4096*inum)
+ * on disk and then write the address of the imap on disk.
+ *
+ * Then, it will update the next block..though i'm not totally sure how
+ * that is working. 
+ */
 int update_CR(int inum) {
   //update the inode table
   if (inum  != -1) {
@@ -29,18 +37,35 @@ int update_CR(int inum) {
   return 0;
 }
 
+/**
+ * Fairly simple method that finds the inode that is associated with
+ * the given inode number. Does this by getting the block that the inode
+ * is in, and the seeking to that block and reading from the block at that
+ * location into the inode.
+ * 
+ * Returns 0 on success, -1 if an invalid inum is passed in.
+ */
 int find_inode(int inum, inode* node) {
   if (inum < 0 || inum >= MAXINODES) 
     return -1;
   
-  int iblock = imap[inum];
-  lseek(fd, iblock*BLOCKSIZE, SEEK_SET);
+  int inode_block = imap[inum];
+  lseek(fd, inode_block*BLOCKSIZE, SEEK_SET);
   read(fd, node, sizeof(inode));
 
   return 0;
 }
 
 
+/**
+ * Builds the directory block.  First initializes a directory (to nothing), 
+ * and then, if first_block is true, it sets the directory with the first 
+ * block information.
+ * Then, it seeks to where the next block is (global), writes what's at 
+ * the directory into the block and increments the next_block variable.
+ *
+ * Returns the block that was written to (1 less than next_block)
+ */
 int build_dir_block(int first_block, int inum, int pinum) {
   directory d;
   int i;
@@ -156,6 +181,8 @@ int lookup(int pinum, char* name) {
  * Probably the simplest method in the library, this function returns
  * the relevant information about the file specified by inum. 
  * It puts the information into the struct passed in. 
+ * TODO: Get this method in the h file so it can be used. 
+ *       I can't get the method to compile, in the h file. 
  */
 int stat_server(int inum, MFS_Stat_t *m) {
   //return information about file given by inum
