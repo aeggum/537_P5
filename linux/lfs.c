@@ -10,8 +10,8 @@
 #include <stdlib.h>
 #include "listenServer.h"
 
-int imap[MAXINODES];   //4096, as defined in lfs.h
-int next_block;        //next block in the AS to be written
+int imap[MAXINODES];   //Inode map points to addresses of Inodes (size 4096)
+int next_block;        //next block in the AS to be written (ie end of the log)
 bool new;
 int fd;
 
@@ -20,8 +20,16 @@ int fd;
  * the method will set the offset to the correct location (4096*inum)
  * on disk and then write the address of the imap on disk.
  *
- * Then, it will update the next block..though i'm not totally sure how
- * that is working. 
+ * EXPLAINATION: Every file image starts with int[4096] array, this is the imap.
+ * We seek to beginFile + inum*sizeof(int) (the Inode we want to update) then 
+ * overwrite it with the new address of the Inode we're refering to
+ *
+ * The "next_block" refers to the address of the next block of memory we can 
+ * write to.  This block could be located anywhere in memory but our "next_block"
+ * int is always located directly after the imap[] and holds the address we want
+ * to write to next
+ *
+ * Sorry if you already knew that; I don't know how recent those comments were.
  */
 int update_CR(int inum) {
   //update the inode table
@@ -102,7 +110,7 @@ int build_dir_block(int first_block, int inum, int pinum) {
 int start_server(int port, char* path) {
   fd = open(path, O_RDWR);
   printf("inside the start_server() method\n");
-  if (fd == -1) {  //file does not exist already
+  if (fd == -1) {  //file does not exist already, START CREATION
     new = true;
     fd = open(path, O_RDWR|O_CREAT|O_TRUNC, S_IRWXU);
     if (fd == -1) return -1;
@@ -156,7 +164,7 @@ int start_server(int port, char* path) {
     next_block++;
    
     update_CR(0);
-  } 
+  } // END NEW FILE CREATION
   else {
     new = false;
     lseek(fd, 0, SEEK_SET);
@@ -172,7 +180,17 @@ int start_server(int port, char* path) {
 
 
 int lookup(int pinum, char* name) {
-  //TODO
+  // TODO: Take pinum (inode number of a directory) get that inode, look up name
+  // in that directory, and return the inode number of the inode that points to name
+  // RETURN -1 on (invalid pinum, name does not exist in pinum)
+
+  inode *pinode = malloc(sizeof(inode));  // Create a temp inode for the directory
+  find_inode(pinum, pinode);  // Find inode associated with pinum and fill in pinode
+
+  // TODO: Need to figure out how inode/directory relationship works before I can
+  // do this.  If at directory-type inode's dpointer[0] just points to a directory
+  // struct this won't be too hard but I'm not sure what actually happens yet
+
   return -1;
 }
 
@@ -296,6 +314,7 @@ int creat_server(int pinum, int type, char *name) {
  */
 int shutdown_server() {
   fsync(fd);
+  // close(fd) ? Maybe want to close the file and check return code?
   exit(0);
   return -1;
 }

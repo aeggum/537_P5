@@ -6,8 +6,8 @@
 #define BUFFER_SIZE (4096)
 
 int
-main(int argc, char *argv[])
-{
+main(int argc, char *argv[]) {
+  /* Check and parse arguments */
   if (argc != 3) {
     printf("Usage: server [portnum] [file-system-image]\n");
     exit(-1);
@@ -18,14 +18,9 @@ main(int argc, char *argv[])
 
   printf("new port number: %d\n", port_num);
 
+  /* Start the server: open file image and copy checkpoint region into memory */
+  /* In lfs.c */
   start_server(port_num, fs_image);
-
-
-  //TODO: Need to open file image and read the checkpoint region and inode map 
-  // into memory.  For now it'll probably be easier to assume the image exists,
-  // but if it doesn't we need to create one and force it to disk
-
-  //listenOnServer(port_num, fs_image); // HAD start_server ??
 
   return 0;
   
