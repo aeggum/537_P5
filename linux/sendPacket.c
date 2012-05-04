@@ -29,9 +29,10 @@ int sendPacket(char* hostname, int port_num, MFS_Packet_t *sent, MFS_Packet_t *r
 
   //want client to accept messages forever..                                        
   while(1) {
-    FD_ZERO(&read_fds);      //clear rfds to 0                                      
+    FD_ZERO(&read_fds);      //clear rfds to 0                              
     FD_SET(sd, &read_fds);   //adds the file descriptor to the set                  
-    UDP_Write(sd, &addr, (char*)response, sizeof(MFS_Packet_t));
+    //THE BUG WAS BELOW: 'sent' was 'response', oops
+    UDP_Write(sd, &addr, (char*)sent, sizeof(MFS_Packet_t));
     if (select(sd + 1, &read_fds, NULL, NULL, &tv)) {
       rc = UDP_Read(sd, &addr2, (char*)response, sizeof(MFS_Packet_t));
       if (rc > 0) {

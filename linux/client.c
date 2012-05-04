@@ -41,7 +41,7 @@ main(int argc, char *argv[])
   
   
   MFS_Shutdown();
-  return -1;
+  return 0;
 }
 
 

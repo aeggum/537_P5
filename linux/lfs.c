@@ -29,6 +29,51 @@ int update_CR(int inum) {
   return 0;
 }
 
+int find_inode(int inum, inode* node) {
+  if (inum < 0 || inum >= MAXINODES) 
+    return -1;
+  
+  int iblock = imap[inum];
+  lseek(fd, iblock*BLOCKSIZE, SEEK_SET);
+  read(fd, node, sizeof(inode));
+
+  return 0;
+}
+
+
+int build_dir_block(int first_block, int inum, int pinum) {
+  directory d;
+  int i;
+  for (i = 0; i < 128; i++) {
+    d.inums[i] = -1;
+    strcpy(d.names[i], "DNE\0");
+  }
+  
+  if (first_block) {
+    d.inums[0] = inum;
+    strcpy(d.names[0], ".\0");
+    d.inums[1] = pinum;
+    strcpy(d.names[1], "..\0");
+  }
+
+  lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
+  write(fd, &d, BLOCKSIZE);
+  next_block++;
+  
+  return next_block - 1;
+}
+
+
+/**
+ * starts the server. First checks if the file has already been created, 
+ * and if not, goes through the entire set-up process, from inodes to 
+ * setting the root directory.  If the file already exists, this method
+ * will just seek to it.
+ * When done with setup, the file will be seeked to and we will start
+ * listening on it.  
+ * 
+ * I do not think the method should ever return.
+ */
 int start_server(int port, char* path) {
   fd = open(path, O_RDWR);
   printf("inside the start_server() method\n");
@@ -41,7 +86,7 @@ int start_server(int port, char* path) {
     
     int i;
     for(i = 0; i < MAXINODES; i++) {
-      imap[i] = -1;      //sets the imap to -1 on init
+      imap[i] = -1;      //sets the ENTIRE imap to -1 on init
     }
         
 
@@ -103,18 +148,125 @@ int start_server(int port, char* path) {
 
 int lookup(int pinum, char* name) {
   //TODO
-  return 0;
+  return -1;
 }
 
-//return -1 only if the inum doesn't exist.
+
+/**
+ * Probably the simplest method in the library, this function returns
+ * the relevant information about the file specified by inum. 
+ * It puts the information into the struct passed in. 
+ */
 int stat_server(int inum, MFS_Stat_t *m) {
   //return information about file given by inum
   //...so we should get the inode related to inum, then fill in m
   //to fill in MFS_Stat_t, there is type and size int fields only
+  inode node; 
+  if (find_inode(inum, &node) == -1) 
+    return -1;    //if the inum doesn't exist, return -1
+  
+  m->type = node.type;
+  m->size = node.type;
   
   return 0;
 }
 
+
+/**
+ * Complicated, and I don't understand it all and will comment when 
+ * I am awake and can. ...
+ */
+int creat_server(int pinum, int type, char *name) {
+  //if server already exists, return a success
+  if (lookup(pinum, name) != -1) return 0;
+  inode parent;
+  if (find_inode(pinum, &parent) == -1) return -1;
+  if (parent.type != MFS_DIRECTORY) return -1;
+
+  int inum = -1;
+  int i;
+  for (i = 0; i < MAXINODES; i++) {
+    if (imap[i] == -1) {
+      inum = i;
+      break;
+    }
+  }
+
+  if (inum == -1) return -1;
+  
+  int b, e; 
+  directory block;
+  for (b = 0; b < 14; b++) {
+    if (parent.dp_used[b]) {
+      lseek(fd, parent.dpointers[b]*BLOCKSIZE, SEEK_SET);
+      read(fd, &block, BLOCKSIZE);
+
+      for (e = 0; e < 128; e++) {
+	if (block.inums[e] == -1) 
+	  goto found_parent_slot;
+      }
+    }
+    else {
+      int bl = build_dir_block(0, inum, -1);
+      parent.size += BLOCKSIZE;
+      parent.dp_used[b] = 1;
+      parent.dpointers[b] = bl;
+      b--;
+    }
+  }
+  
+  return -1;   //when the directory is full
+  
+ found_parent_slot:
+  lseek(fd, imap[pinum]*BLOCKSIZE, SEEK_SET);
+  write(fd, &parent, BLOCKSIZE);
+  block.inums[e] = inum;
+  strcpy(block.names[e], name);
+  lseek(fd, parent.dpointers[b]*BLOCKSIZE, SEEK_SET);
+  write(fd, &block, BLOCKSIZE);
+
+
+  //create inode
+  inode n;
+  n.inum = inum;
+  n.size = 0;
+  for (i = 0; i < 14; i++) {
+    n.dp_used[i] = 0;
+    n.dpointers[i] = -1;
+  }
+  n.type = type;
+  if (type == MFS_DIRECTORY) {
+    n.dp_used[0] = 1;
+    n.dpointers[0] = next_block;
+    
+    build_dir_block(1, inum, pinum);
+    
+    // update file size
+    n.size += BLOCKSIZE;
+  }
+  else if (type != MFS_DIRECTORY && type != MFS_REGULAR_FILE) {
+    return -1;
+  }
+
+  // update imap
+  imap[inum] = next_block;
+
+  // write inode
+  lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
+  write(fd, &n, sizeof(inode));
+  next_block++;
+  
+  // write checkpoint region
+  update_CR(inum);
+
+  return 0;
+}
+
+
+/**
+ * Shuts down the server.  Synchronize the file and then exit
+ * the program.  The return statement should never be reached.
+ */
 int shutdown_server() {
   fsync(fd);
   exit(0);

@@ -27,6 +27,7 @@ int update_CR(int inum);
 int start_server(int port, char* path);
 int shutdown_server();
 int lookup(int pinum, char* name);
-//int stat_server(int inum, MFS_Stat_t *m);  doesn't compile due to MFS_Stat..
+//int stat_server(int inum, MFS_Stat_t *m);   //doesn't compile
+int creat_server(int pinum, int type, char *name);
 #endif
 
