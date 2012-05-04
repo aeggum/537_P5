@@ -12,6 +12,22 @@ typedef struct __MFS_Stat_t {
   // note: no permissions, access times, etc.
   } MFS_Stat_t;
 
+// TODO: Need some sort of check point region structure, i think?
+//typedef struct __MFS_ChkPtRgn {
+  // NEED:	Pointer to end of log (size of the log in bytes?)
+  //		Array of pointers to pieces of the inode map
+
+  //} MFS_ChkPtRgn
+
+// TODO: Need an Inode structure (I didn't see one yet)
+    /*typedef struct __MFS_Inode {
+  // NEED:	Inode number? [This is the index of the Inode map where each is located]
+  //		Size
+  //		Type (regular or directory)
+  //		Arr[14] pointers to data blocks (4KB) for the file
+
+  } MFS_Inode*/
+
 typedef struct __MFS_DirEnt_t {
   char name[28];  // up to 28 bytes of name in directory (including \0)
   int  inum;      // inode number of entry (-1 means entry not used)

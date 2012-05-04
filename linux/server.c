@@ -15,10 +15,18 @@ main(int argc, char *argv[])
 
   int port_num = atoi(argv[1]);
   char* fs_image = argv[2];
+
   printf("new port number: %d\n", port_num);
 
   start_server(port_num, fs_image);
-  
+
+
+  //TODO: Need to open file image and read the checkpoint region and inode map 
+  // into memory.  For now it'll probably be easier to assume the image exists,
+  // but if it doesn't we need to create one and force it to disk
+
+  //listenOnServer(port_num, fs_image); // HAD start_server ??
+
   return 0;
   
   /*int sd = UDP_Open(10000);
@@ -53,6 +61,7 @@ main(int argc, char *argv[])
   }
 
   printf("starting the server (listening) in server.c\n");
+
   while(1) {
     struct sockaddr_in s;
     MFS_Packet_t packet;
@@ -93,7 +102,7 @@ main(int argc, char *argv[])
       response.method = RESPONSE;
       rc = UDP_Write(sd, &s, (char*)&response, sizeof(MFS_Packet_t));
       if (packet.method == SHUTDOWN)
-	shutdown_server();
+	shutdown_server(); // TODO: implement this.  is it just an exit? fsync then exit?
     }
   }
   }*/
