@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "udp.h"
+#include "sendPacket.h"
 
 //global variables that will be initialized in MFS_INIT
 bool init_done = false;
@@ -44,7 +45,7 @@ int MFS_Lookup(int pinum, char *name) {
   
   MFS_Packet_t send, receive;
   send.inum = pinum;
-  strcpy(send.name, name);
+  strcpy((char*)&(send.name), name);
   send.method = LOOKUP;
   int rc = sendPacket(server_name, server_port, &send, &receive);
   if (rc < 0)
@@ -107,14 +108,15 @@ int MFS_Read(int inum, char *buffer, int block) {
   MFS_Packet_t send, receive;
   send.method = READ;
   send.inum = inum;
-  memcpy(send.buffer, buffer, 4096);
   send.block = block;
   
   int rc = sendPacket(server_name, server_port, &send, &receive);
   if (rc < 0) 
     return -1;
   
-  //TODO: something to deal with returning either directory or non-directories.
+  if (receive.inum > -1) 
+    memcpy(send.buffer, buffer, 4096);
+  
   return 0;
 }
 
@@ -126,7 +128,7 @@ int MFS_Read(int inum, char *buffer, int block) {
  */
 int MFS_Creat(int pinum, int type, char *name) {
   if (!init_done) return -1;
-  if (length_check < 0) return -1;
+  if (length_check(name) < 0) return -1;
   
   MFS_Packet_t send, receive;
   send.inum = pinum;
@@ -147,14 +149,14 @@ int MFS_Creat(int pinum, int type, char *name) {
  */
 int MFS_Unlink(int pinum, char *name) {
   if (!init_done) return -1;
-  if (length_check < 0) return -1;
+  if (length_check(name) < 0) return -1;
   
   MFS_Packet_t send, receive;
   send.method = UNLINK;
   send.inum = pinum;
   strcpy(send.name, name);
 
-  int rc = sendPacket(server_name, server_port, send, receive);
+  int rc = sendPacket(server_name, server_port, &send, &receive);
   if (rc < 0)
     return -1;
 
@@ -173,7 +175,7 @@ int MFS_Shutdown() {
   MFS_Packet_t send, receive;
   send.method = SHUTDOWN;
   
-  int rc = sendPacket(server_name, server_port, send, receive);
+  int rc = sendPacket(server_name, server_port, &send, &receive);
   if (rc < 0)
     return -1;
   

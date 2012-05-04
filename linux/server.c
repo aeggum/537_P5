@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "udp.h"
 #include "mfs.h"
+#include "lfs.h"
 
 #define BUFFER_SIZE (4096)
 
@@ -14,6 +15,8 @@ main(int argc, char *argv[])
 
   int port_num = atoi(argv[1]);
   char* fs_image = argv[2];
+  printf("new port number: %d\n", port_num);
+
   start_server(port_num, fs_image);
   
   return 0;
@@ -37,9 +40,12 @@ main(int argc, char *argv[])
 }
 
 
+//MOVED THE MOTHOD BELOW TO ITS OWN FILE TO HELP WITH COMPILATION (I HOPE)
+
 //TODO I think this method is something like we will need.  
 //Call a method to open a port and keep it open, listening.
-void listenOnServer(int port_num) {
+
+/*void listenOnServer(int port_num) {
   int sd = UDP_Open(port_num);
   if (sd < 0) {   //TODO: It's failing here, so set-up isn't right
     printf("Error in opening a socket on port_num %d\n", port_num);
@@ -90,4 +96,4 @@ void listenOnServer(int port_num) {
 	shutdown_server();
     }
   }
-}
+  }*/

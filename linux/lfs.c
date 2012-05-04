@@ -8,12 +8,14 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "listenServer.h"
 
 int imap[MAXINODES];   //4096, as defined in lfs.h
 int next_block;        //next block in the AS to be written
 bool new;
+int fd;
 
-int update_CR(int inum, int fd) {
+int update_CR(int inum) {
   //update the inode table
   if (inum  != -1) {
     lseek(fd, inum*sizeof(int), SEEK_SET);
@@ -23,10 +25,12 @@ int update_CR(int inum, int fd) {
   //update the next block
   lseek(fd, MAXINODES*sizeof(int), SEEK_SET);
   write(fd, &next_block, sizeof(int));
+  
+  return 0;
 }
 
 int start_server(int port, char* path) {
-  int fd = open(path, O_RDWR);
+  fd = open(path, O_RDWR);
   printf("inside the start_server() method\n");
   if (fd == -1) {  //file does not exist already
     new = true;
@@ -69,7 +73,6 @@ int start_server(int port, char* path) {
       strcpy(base_block.names[i], "DNE\0");
     }
     
-
     //write the base block
     lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
     write(fd, &base_block, sizeof(directory));
@@ -82,7 +85,7 @@ int start_server(int port, char* path) {
     write(fd, &root_node, sizeof(inode));
     next_block++;
    
-    update_CR(0, fd);
+    update_CR(0);
   } 
   else {
     new = false;
@@ -90,11 +93,13 @@ int start_server(int port, char* path) {
     read(fd, imap, sizeof(int)*MAXINODES);
     read(fd, &next_block, sizeof(int));
   }
-  
+ 
   printf("calling to listen on port: %d\n", port);
   listenOnServer(port);
   return 0;
 }
+
+
 
 int lookup(int pinum, char* name) {
   //TODO
@@ -111,6 +116,7 @@ int stat_server(int inum, MFS_Stat_t *m) {
 }
 
 int shutdown_server() {
+  fsync(fd);
   exit(0);
   return -1;
 }

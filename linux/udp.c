@@ -64,11 +64,12 @@ UDP_Write(int fd, struct sockaddr_in *addr, char *buffer, int n)
 
 int
 UDP_Read(int fd, struct sockaddr_in *addr, char *buffer, int n)
-{
-    int len = sizeof(struct sockaddr_in); 
-    int rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
-    // assert(len == sizeof(struct sockaddr_in)); 
-    return rc;
+{  
+  int len = sizeof(struct sockaddr_in); 
+  int rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
+  //gets stuck above...why?  need to figure it out.
+  // assert(len == sizeof(struct sockaddr_in)); 
+  return rc;
 }
 
 

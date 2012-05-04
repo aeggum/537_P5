@@ -23,7 +23,7 @@ typedef struct __directory {
 
 
 //Function prototypes (implement in lfs.c)
-int update_CR(int inum, int fd);
+int update_CR(int inum);
 int start_server(int port, char* path);
 int shutdown_server();
 int lookup(int pinum, char* name);
