@@ -1,0 +1,50 @@
+
+**********************************************************************
+
+Test build
+build project using make
+
+**********************************************************************
+make clean
+rm -rf libmfs.so client server *.o
+make
+gcc -shared -fpic -g -Wall -Werror -o libmfs.so mfs.c lfs.c sendPacket.c listenServer.c udp.c
+gcc -Wall -Werror -o server server.c listenServer.c lfs.c udp.c
+gcc -g -L. -lmfs -Wall -Werror -o client client.c
+
+
+test build PASSED
+ (build project using make)
+
+
+**********************************************************************
+
+Test stat2
+stat a sparse file
+
+**********************************************************************
+Server received CREAT packet
+Server received LOOKUP packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received STAT packet
+test stat2 FAILED
+
+
+test stat2 FAILED
+ (stat a sparse file)
+ Stat gave wrong size
+
+**********************************************************************
+Summary:
+test build PASSED
+ (build project using make)
+
+test stat2 FAILED
+ (stat a sparse file)
+ Stat gave wrong size
+
+Passed 1 of 2 tests.
+Overall 1 of 2
