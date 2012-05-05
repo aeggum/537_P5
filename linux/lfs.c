@@ -179,14 +179,24 @@ int start_server(int port, char* path) {
 
 
 
+/**
+ * Takes in the parent inode and looks up the entry name in the parent. 
+ * The inode number of name is returned. 
+ */
 int lookup(int pinum, char* name) {
-  // TODO: Take pinum (inode number of a directory) get that inode, look up name
-  // in that directory, and return the inode number of the inode that points to name
   // RETURN -1 on (invalid pinum, name does not exist in pinum)
-
   inode *pinode = malloc(sizeof(inode));  // Create a temp inode for the directory
-  find_inode(pinum, pinode);  // Find inode associated with pinum and fill in pinode
+  //get the inode associated with the passed in pinum
+  if (find_inode(pinum, pinode) != 0) 
+    return -1;  
 
+  int i;
+  for (i = 0; i < 14; i++) {
+    //if the direct pointer at that location is used
+    if (pinode->dp_used[i] == 1) {
+      //TODO: need to do something with directory structs and seeking, now?
+    }
+  }
   // TODO: Need to figure out how inode/directory relationship works before I can
   // do this.  If at directory-type inode's dpointer[0] just points to a directory
   // struct this won't be too hard but I'm not sure what actually happens yet
@@ -218,37 +228,48 @@ int stat_server(int inum, MFS_Stat_t *m) {
 
 
 /**
- * Complicated, and I don't understand it all and will comment when 
- * I am awake and can. ...
+ * Takes in the parent's inode number and the type of file to create, 
+ * MFS_DIRECTORY or MFS_REGULAR_FILE, as well as the name of the parent.
+ * The parent needs to be a directory.  
+ *
+ * Otherwise, tries to find a slot and then makes a file in the parent's 
+ * directory.  More comments are listed throughout. 
  */
 int creat_server(int pinum, int type, char *name) {
-  //if server already exists, return a success
+  //if server already exists, return a success (as specified)
   if (lookup(pinum, name) != -1) return 0;
   inode parent;
-  if (find_inode(pinum, &parent) == -1) return -1;
-  if (parent.type != MFS_DIRECTORY) return -1;
-
+  if (find_inode(pinum, &parent) == -1) return -1;  //invalid pinum
+  if (parent.type != MFS_DIRECTORY) return -1;  //can't make a file in a file
+  
   int inum = -1;
   int i;
-  for (i = 0; i < MAXINODES; i++) {
+  for (i = 0; i < MAXINODES; i++) {  //look for empty slots in imap
     if (imap[i] == -1) {
       inum = i;
-      break;
+      break;  //found one!  get out
     }
   }
 
+  //imap is completely full, return error
   if (inum == -1) return -1;
   
   int b, e; 
   directory block;
+  /*
+   * look at the direct ponters of parent, try to find an open slot to place
+   * the new child.  each time it finds a parent that doesn't match, it does 
+   * some other stuff. 
+   */
   for (b = 0; b < 14; b++) {
     if (parent.dp_used[b]) {
       lseek(fd, parent.dpointers[b]*BLOCKSIZE, SEEK_SET);
       read(fd, &block, BLOCKSIZE);
 
       for (e = 0; e < 128; e++) {
-	if (block.inums[e] == -1) 
-	  goto found_parent_slot;
+	if (block.inums[e] == -1)
+	  goto found_slot;  //we found a slot for the file to go
+	                    //and then use some c magic with a goto
       }
     }
     else {
@@ -262,7 +283,7 @@ int creat_server(int pinum, int type, char *name) {
   
   return -1;   //when the directory is full
   
- found_parent_slot:
+ found_slot:
   lseek(fd, imap[pinum]*BLOCKSIZE, SEEK_SET);
   write(fd, &parent, BLOCKSIZE);
   block.inums[e] = inum;
