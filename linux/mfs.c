@@ -136,10 +136,11 @@ int MFS_Creat(int pinum, int type, char *name) {
   send.method = CREAT;
   
   strcpy(send.name, name);
-  if (sendPacket(server_name, server_port, &send, &receive) < 0)
+  if (sendPacket(server_name, server_port, &send, &receive) < 0) {
+	fprintf(stderr, "sendPacket error");
     return -1;
-
-  return receive.inum;
+  }
+  return 0;
 }
 
 

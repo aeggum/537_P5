@@ -49,7 +49,7 @@ int sendPacket(char* hostname, int port_num, MFS_Packet_t *sent, MFS_Packet_t *r
       }
       else {
 	  //do something else  
-        printf("Something! Most likely an error");
+        fprintf(stderr, "Something! Most likely an error");
       }
     } //end if(select())                                                            
   } //end while(1)                                                                  

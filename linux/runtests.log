@@ -23,11 +23,11 @@ Test shutdown
 init server and client then call shutdown
 
 **********************************************************************
-new port number: 31670
-inside the start_server() method
-calling to listen on port: 31670
-starting the server (listening) in server.c
 Server received SHUTDOWN packet
+new port number: 27635
+inside the start_server() method
+calling to listen on port: 27635
+starting the server (listening) in server.c
 
 
 test shutdown PASSED
@@ -40,12 +40,17 @@ Test creat
 creat a file and check with lookup
 
 **********************************************************************
-test creat FAILED
+Server received CREAT packet
+Server received CREAT packet
+Server received SHUTDOWN packet
+new port number: 27635
+inside the start_server() method
+calling to listen on port: 27635
+starting the server (listening) in server.c
 
 
-test creat FAILED
+test creat PASSED
  (creat a file and check with lookup)
- MFS_Creat returned failure inum=0 type=1 name='test'
 
 
 **********************************************************************
@@ -54,12 +59,16 @@ Test write
 write then read one block
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received WRITE packet
+Server received READ packet
 test write FAILED
 
 
 test write FAILED
  (write then read one block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 
 **********************************************************************
@@ -68,12 +77,15 @@ Test stat
 stat a regular file
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received STAT packet
 test stat FAILED
 
 
 test stat FAILED
  (stat a regular file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Stat gave wrong type
 
 
 **********************************************************************
@@ -82,12 +94,16 @@ Test overwrite
 overwrite a block
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received WRITE packet
+Server received READ packet
 test overwrite FAILED
 
 
 test overwrite FAILED
  (overwrite a block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 
 **********************************************************************
@@ -96,12 +112,29 @@ Test maxfile
 write largest possible file
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received READ packet
 test maxfile FAILED
 
 
 test maxfile FAILED
  (write largest possible file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 
 **********************************************************************
@@ -110,12 +143,29 @@ Test maxfile2
 write more blocks than possible
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
 test maxfile2 FAILED
 
 
 test maxfile2 FAILED
  (write more blocks than possible)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write should fail on inalid block number
 
 
 **********************************************************************
@@ -124,12 +174,16 @@ Test sparse
 write first and last block
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received WRITE packet
+Server received READ packet
 test sparse FAILED
 
 
 test sparse FAILED
  (write first and last block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 
 **********************************************************************
@@ -138,12 +192,19 @@ Test stat2
 stat a sparse file
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received WRITE packet
+Server received STAT packet
 test stat2 FAILED
 
 
 test stat2 FAILED
  (stat a sparse file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Stat gave wrong type
 
 
 **********************************************************************
@@ -152,6 +213,7 @@ Test dir1
 check root for dot entries
 
 **********************************************************************
+Server received CREAT packet
 test dir1 FAILED
 
 
@@ -166,12 +228,16 @@ Test dir2
 create a new directory and check it
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received CREAT packet
+Server received CREAT packet
 test dir2 FAILED
 
 
 test dir2 FAILED
  (create a new directory and check it)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ '..' in directory should point to parent
 
 
 **********************************************************************
@@ -180,12 +246,15 @@ Test baddir
 try to create a file with a file parent inode
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received CREAT packet
 test baddir FAILED
 
 
 test baddir FAILED
  (try to create a file with a file parent inode)
- MFS_Creat returned failure inum=0 type=1 name='testdir'
+ MFS_Creat should fail if pinum is not a directory
 
 
 **********************************************************************
@@ -194,12 +263,15 @@ Test baddir2
 try to lookup a file with a file parent inode
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received CREAT packet
 test baddir2 FAILED
 
 
 test baddir2 FAILED
  (try to lookup a file with a file parent inode)
- MFS_Creat returned failure inum=0 type=1 name='testdir'
+ MFS_Lookup should fail if pinum is not a directory
 
 
 **********************************************************************
@@ -208,12 +280,16 @@ Test unlink
 unlink a file
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received UNLINK packet
+Server received CREAT packet
 test unlink FAILED
 
 
 test unlink FAILED
  (unlink a file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Lookup should fail on an unlinked file
 
 
 **********************************************************************
@@ -222,12 +298,16 @@ Test unlink2
 unlink a directory
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received UNLINK packet
+Server received CREAT packet
 test unlink2 FAILED
 
 
 test unlink2 FAILED
  (unlink a directory)
- MFS_Creat returned failure inum=0 type=0 name='test'
+ MFS_Lookup should fail on an unlinked file
 
 
 **********************************************************************
@@ -236,12 +316,17 @@ Test empty
 unlink a non-empty directory
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received CREAT packet
+Server received CREAT packet
+Server received UNLINK packet
 test empty FAILED
 
 
 test empty FAILED
  (unlink a non-empty directory)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Unlink should fail on non-empty dir
 
 
 **********************************************************************
@@ -250,11 +335,11 @@ Test name
 name too long
 
 **********************************************************************
-new port number: 31670
-inside the start_server() method
-calling to listen on port: 31670
-starting the server (listening) in server.c
 Server received SHUTDOWN packet
+new port number: 27635
+inside the start_server() method
+calling to listen on port: 27635
+starting the server (listening) in server.c
 
 
 test name PASSED
@@ -267,12 +352,17 @@ Test persist
 restart server after creating a file
 
 **********************************************************************
+Server received CREAT packet
+Server received CREAT packet
+Server received WRITE packet
+Server received CREAT packet
+Server received READ packet
 test persist FAILED
 
 
 test persist FAILED
  (restart server after creating a file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 
 **********************************************************************
@@ -309,37 +399,36 @@ test build PASSED
 test shutdown PASSED
  (init server and client then call shutdown)
 
-test creat FAILED
+test creat PASSED
  (creat a file and check with lookup)
- MFS_Creat returned failure inum=0 type=1 name='test'
 
 test write FAILED
  (write then read one block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 test stat FAILED
  (stat a regular file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Stat gave wrong type
 
 test overwrite FAILED
  (overwrite a block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 test maxfile FAILED
  (write largest possible file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 test maxfile2 FAILED
  (write more blocks than possible)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write should fail on inalid block number
 
 test sparse FAILED
  (write first and last block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 test stat2 FAILED
  (stat a sparse file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Stat gave wrong type
 
 test dir1 FAILED
  (check root for dot entries)
@@ -347,39 +436,39 @@ test dir1 FAILED
 
 test dir2 FAILED
  (create a new directory and check it)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ '..' in directory should point to parent
 
 test baddir FAILED
  (try to create a file with a file parent inode)
- MFS_Creat returned failure inum=0 type=1 name='testdir'
+ MFS_Creat should fail if pinum is not a directory
 
 test baddir2 FAILED
  (try to lookup a file with a file parent inode)
- MFS_Creat returned failure inum=0 type=1 name='testdir'
+ MFS_Lookup should fail if pinum is not a directory
 
 test unlink FAILED
  (unlink a file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Lookup should fail on an unlinked file
 
 test unlink2 FAILED
  (unlink a directory)
- MFS_Creat returned failure inum=0 type=0 name='test'
+ MFS_Lookup should fail on an unlinked file
 
 test empty FAILED
  (unlink a non-empty directory)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Unlink should fail on non-empty dir
 
 test name PASSED
  (name too long)
 
 test persist FAILED
  (restart server after creating a file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ Corrupt data returned by read
 
 test drop FAILED
  (drop every other packet sent by client)
  User interrupted test
 
-Passed 3 of 20 tests.
+Passed 4 of 20 tests.
 Skipped 7 tests.
-Overall 3 of 27
+Overall 4 of 27

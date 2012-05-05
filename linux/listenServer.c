@@ -30,45 +30,45 @@ void listenOnServer(int port_num) {
       switch(sentPacket.method) {
 	
       case INIT:
-        printf("Server received INIT packet\n");
+        fprintf(stderr, "Server received INIT packet\n");
 	    break;
 	
       case LOOKUP:  // Fill in "response" packet after using info from "sentPacket"
-        printf("Server received LOOKUP packet\n");
+        fprintf(stderr, "Server received CREAT packet\n");
         // Call lookup() in lfs.c w/ pinum(sentPacket.inum) and name of file to find
         response.inum = lookup(sentPacket.inum, sentPacket.name);
         break;
 
       case STAT:
-        printf("Server received STAT packet\n");
+        fprintf(stderr, "Server received STAT packet\n");
         break;
 
       case WRITE:
-        printf("Server received WRITE packet\n");
+        fprintf(stderr, "Server received WRITE packet\n");
         break;
 
       case READ:
-        printf("Server received READ packet\n");
+        fprintf(stderr, "Server received READ packet\n");
         break;
 
       case CREAT:
-        printf("Server received CREAT packet\n");
-	response.inum = creat_server(sentPacket.inum, sentPacket.type, sentPacket.name);
+        fprintf(stderr, "Server received CREAT packet\n");
+        response.inum = creat_server(sentPacket.inum, sentPacket.type, sentPacket.name);
         break;
 
       case UNLINK:
-        printf("Server received UNLINK packet\n");
+        fprintf(stderr, "Server received UNLINK packet\n");
         break;
 
       case SHUTDOWN:
-        printf("Server received SHUTDOWN packet\n");
+        fprintf(stderr, "Server received SHUTDOWN packet\n");
         //shutdown_server();
         break;
 
       case RESPONSE:
         // What case does this happen in? Whend does the client send response method?
 	//i don't think it ever will, it's there to keep the compiler happy.
-        printf("Server received RESPONSE packet\n");
+        fprintf(stderr, "Server received RESPONSE packet\n");
         break;
       }
       
@@ -76,12 +76,12 @@ void listenOnServer(int port_num) {
       // FROM P5 desciption: "before returning a success code, the file system 
       // should always fsync() the image" --- Probably want to fsync here (or somewhere)
       if(UDP_Write(sd, &s, (char*)&response, sizeof(MFS_Packet_t) < 0)) {
-        printf("Error sending response from server to client");
+        fprintf(stderr, "Error sending response from server to client");
       }
       if (sentPacket.method == SHUTDOWN) {
 	    shutdown_server();
       }
     } // END else
   } // END while-loop
-  printf("SHOULD NOT GET HERE! THIS WOULD MAKE NO SENSE");
+  fprintf(stderr, "SHOULD NOT GET HERE! THIS WOULD MAKE NO SENSE");
 } // END listenOnServer()
