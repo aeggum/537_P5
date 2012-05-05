@@ -186,21 +186,25 @@ int start_server(int port, char* path) {
 int lookup(int pinum, char* name) {
   // RETURN -1 on (invalid pinum, name does not exist in pinum)
   inode *pinode = malloc(sizeof(inode));  // Create a temp inode for the directory
+  directory direct;
   //get the inode associated with the passed in pinum
   if (find_inode(pinum, pinode) != 0) 
     return -1;  
 
   int i;
+  int j;
   for (i = 0; i < 14; i++) {
     //if the direct pointer at that location is used
     if (pinode->dp_used[i] == 1) {
-      //TODO: need to do something with directory structs and seeking, now?
+      lseek(fd, parent.dpointers[i]*BLOCKSIZE, SEEK_SET);
+      read(fd, &direct, BLOCKSIZE);
+      for(j = 0; j < 128; j++) {
+        if(strcmp(direct.names[j], name) == 0) {
+          return direct.inums[j];
+        }
+      }
     }
   }
-  // TODO: Need to figure out how inode/directory relationship works before I can
-  // do this.  If at directory-type inode's dpointer[0] just points to a directory
-  // struct this won't be too hard but I'm not sure what actually happens yet
-
   return -1;
 }
 
