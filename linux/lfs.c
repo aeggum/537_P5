@@ -241,10 +241,10 @@ int stat_server(int inum, MFS_Stat_t *m) {
  */
 int creat_server(int pinum, int type, char *name) {
   //if server already exists, return a success (as specified)
-  if (lookup(pinum, name) != -1) return 0;
   inode parent;
   if (find_inode(pinum, &parent) == -1) return -1;  //invalid pinum
   if (parent.type != MFS_DIRECTORY) return -1;  //can't make a file in a file
+  if (lookup(pinum, name) != -1) return 0;
   
   int inum = -1;
   int i;

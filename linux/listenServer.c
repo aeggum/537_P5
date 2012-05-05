@@ -40,7 +40,7 @@ void listenOnServer(int port_num) {
         break;
 
       case STAT:
-        response.inum = stat_server(sentPacket.inum, &sentPacket.stat);
+        stat_server(sentPacket.inum, &response.stat);
         fprintf(stderr, "Server received STAT packet\n");
         break;
 
@@ -76,7 +76,8 @@ void listenOnServer(int port_num) {
       response.method = RESPONSE;
       // FROM P5 desciption: "before returning a success code, the file system 
       // should always fsync() the image" --- Probably want to fsync here (or somewhere)
-      if(UDP_Write(sd, &s, (char*)&response, sizeof(MFS_Packet_t) < 0)) {
+      // Fixed missing bracket that screwed stuff up, sorry about that
+      if(UDP_Write(sd, &s, (char*)&response, sizeof(MFS_Packet_t)) < 0) {
         fprintf(stderr, "Error sending response from server to client");
       }
       if (sentPacket.method == SHUTDOWN) {

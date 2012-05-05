@@ -140,7 +140,7 @@ int MFS_Creat(int pinum, int type, char *name) {
 	fprintf(stderr, "sendPacket error");
     return -1;
   }
-  return 0;
+  return receive.inum;
 }
 
 
