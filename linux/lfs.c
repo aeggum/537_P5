@@ -269,9 +269,9 @@ int creat_server(int pinum, int type, char *name) {
       read(fd, &block, BLOCKSIZE);
 
       for (e = 0; e < 128; e++) {
-	if (block.inums[e] == -1)
-	  goto found_slot;  //we found a slot for the file to go
-	                    //and then use some c magic with a goto
+	    if (block.inums[e] == -1)
+	      goto found_slot;  //we found a slot for the file to go
+	                        //and then use some c magic with a goto
       }
     }
     else {
@@ -334,19 +334,19 @@ int write_server(int inum, char *buffer, int block) {
   inode node;
   //invalid inum
   if (find_inode(inum, &node) != 0) {
-    fprintf(stderr, "WRITE: invalid inum");
+    fprintf(stderr, "WRITE: invalid inum\n");
     return -1;  
   }
 
   //invalid file type (directory)
   if (node.type != MFS_REGULAR_FILE) {
-    fprintf(stderr, "WRITE: invalid file type");
+    fprintf(stderr, "WRITE: invalid file type\n");
     return -1;
   }
 
   //invalid block number (think that this keeps the size in check)
   if (block < 0 || block > 13) {
-    fprintf(stderr, "WRITE: invalid block number");
+    fprintf(stderr, "WRITE: invalid block number\n");
     return -1;
   }
 
@@ -357,14 +357,23 @@ int write_server(int inum, char *buffer, int block) {
 
   // write buffer 
   lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
-  write(fd, buffer, sizeof(BLOCKSIZE));
+  write(fd, buffer, BLOCKSIZE);
+  //fprintf(stderr, "Writing to inum %d file-block %d, physical block %d\n", inum, block, next_block);
 
-  node.dpointers[block] = next_block*BLOCKSIZE;
+  node.dpointers[block] = next_block;
+
+  //fprintf(stderr, "Inode %d dpointer[%d] is %d\n", node.inum, block, node.dpointers[block]);
   if (!node.dp_used[block]) {
-    node.size += BLOCKSIZE;
     node.dp_used[block] = 1;
+    node.size += BLOCKSIZE;
   }
-  //maybe need to update the imap
+  // TODO: Actually do this
+  if(node.dp_used[13]) 
+    node.size = 14*BLOCKSIZE;
+
+  // Write the Inode data
+  lseek(fd, imap[inum]*BLOCKSIZE, SEEK_SET);
+  write(fd, &node, sizeof(inode));
 
   //update the checkpoint region
   next_block++;
@@ -385,8 +394,10 @@ int read_server(int inum, char *buffer, int block) {
     return -1;
 
   if (node.type == MFS_REGULAR_FILE) {
-    lseek(fd, node.dpointers[block], SEEK_SET);
+    lseek(fd, node.dpointers[block]*BLOCKSIZE, SEEK_SET);
     read(fd, buffer, BLOCKSIZE);
+    fprintf(stderr, "Reading from Inode %d file-block %d, physical block %d\n", node.inum, block, node.dpointers[block]);
+    fprintf(stderr, "Inode %d dpointer[%d] is %d\n", node.inum, block, node.dpointers[block]);
     //node.dpointers[block];
   }
   else  {    //MFS_DIRECTORY

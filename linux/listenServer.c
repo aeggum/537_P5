@@ -31,6 +31,7 @@ void listenOnServer(int port_num) {
 	
       case INIT:
         fprintf(stderr, "Server received INIT packet\n");
+        // NULL CASE
 	    break;
 	
       case LOOKUP:
@@ -50,7 +51,7 @@ void listenOnServer(int port_num) {
 
       case READ:
         fprintf(stderr, "Server received READ packet\n");
-	response.inum = read_server(sentPacket.inum, sentPacket.buffer, sentPacket.block);
+	response.inum = read_server(sentPacket.inum, response.buffer, sentPacket.block);
         break;
 
       case CREAT:
@@ -68,8 +69,7 @@ void listenOnServer(int port_num) {
         break;
 
       case RESPONSE:
-        // What case does this happen in? Whend does the client send response method?
-	//i don't think it ever will, it's there to keep the compiler happy.
+        // NULL CASE
         fprintf(stderr, "Server received RESPONSE packet\n");
         break;
       }

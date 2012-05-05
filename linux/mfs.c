@@ -74,7 +74,7 @@ int MFS_Stat(int inum, MFS_Stat_t *m) {
   }
   //now copy the contents from the received packet into m
   memcpy(m, &(receive.stat), sizeof(MFS_Stat_t));
-  return 0;
+  return receive.inum;
 }
 
 
@@ -96,7 +96,7 @@ int MFS_Write(int inum, char *buffer, int block) {
     return -1;
   
   //return 0 on success, -1 on failure
-  return 0;
+  return receive.inum;
 }
 
 
@@ -118,9 +118,9 @@ int MFS_Read(int inum, char *buffer, int block) {
     return -1;
   
   if (receive.inum > -1) 
-    memcpy(send.buffer, buffer, 4096);
+    memcpy(buffer, receive.buffer, 4096);
   
-  return 0;
+  return receive.inum;
 }
 
 
@@ -165,7 +165,7 @@ int MFS_Unlink(int pinum, char *name) {
     return -1;
 
   //return 0 on success, -1 on failure (as above)
-  return 0;
+  return receive.inum;
 }
 
 
