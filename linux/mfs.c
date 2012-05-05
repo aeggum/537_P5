@@ -69,6 +69,9 @@ int MFS_Stat(int inum, MFS_Stat_t *m) {
   if (rc < 0) 
     return -1;
 
+  if(receive.inum < 0) {
+    return -1;
+  }
   //now copy the contents from the received packet into m
   memcpy(m, &(receive.stat), sizeof(MFS_Stat_t));
   return 0;

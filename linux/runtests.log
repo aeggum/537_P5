@@ -41,7 +41,7 @@ creat a file and check with lookup
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received SHUTDOWN packet
 new port number: 27635
 inside the start_server() method
@@ -60,7 +60,7 @@ write then read one block
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received WRITE packet
 Server received READ packet
 test write FAILED
@@ -78,7 +78,7 @@ stat a regular file
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received STAT packet
 Server received STAT packet
 Server received WRITE packet
@@ -98,7 +98,7 @@ overwrite a block
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received WRITE packet
 Server received READ packet
 test overwrite FAILED
@@ -116,7 +116,7 @@ write largest possible file
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received WRITE packet
 Server received WRITE packet
 Server received WRITE packet
@@ -147,7 +147,7 @@ write more blocks than possible
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received WRITE packet
 Server received WRITE packet
 Server received WRITE packet
@@ -178,7 +178,7 @@ write first and last block
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received WRITE packet
 Server received READ packet
 test sparse FAILED
@@ -196,7 +196,7 @@ stat a sparse file
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received WRITE packet
 Server received WRITE packet
 Server received WRITE packet
@@ -216,8 +216,8 @@ Test dir1
 check root for dot entries
 
 **********************************************************************
-Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
+Server received LOOKUP packet
 Server received SHUTDOWN packet
 new port number: 27635
 inside the start_server() method
@@ -236,9 +236,9 @@ create a new directory and check it
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
-Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
+Server received LOOKUP packet
+Server received LOOKUP packet
 Server received SHUTDOWN packet
 new port number: 27635
 inside the start_server() method
@@ -257,7 +257,7 @@ try to create a file with a file parent inode
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received CREAT packet
 Server received SHUTDOWN packet
 new port number: 27635
@@ -277,8 +277,8 @@ try to lookup a file with a file parent inode
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
+Server received LOOKUP packet
 Server received SHUTDOWN packet
 new port number: 27635
 inside the start_server() method
@@ -297,9 +297,9 @@ unlink a file
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received UNLINK packet
-Server received CREAT packet
+Server received LOOKUP packet
 test unlink FAILED
 
 
@@ -315,9 +315,9 @@ unlink a directory
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received UNLINK packet
-Server received CREAT packet
+Server received LOOKUP packet
 test unlink2 FAILED
 
 
@@ -333,9 +333,9 @@ unlink a non-empty directory
 
 **********************************************************************
 Server received CREAT packet
+Server received LOOKUP packet
 Server received CREAT packet
-Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received UNLINK packet
 test empty FAILED
 
@@ -369,9 +369,9 @@ restart server after creating a file
 
 **********************************************************************
 Server received CREAT packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received WRITE packet
-Server received CREAT packet
+Server received LOOKUP packet
 Server received READ packet
 test persist FAILED
 
