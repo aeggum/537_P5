@@ -24,9 +24,9 @@ init server and client then call shutdown
 
 **********************************************************************
 Server received SHUTDOWN packet
-new port number: 27635
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -43,9 +43,9 @@ creat a file and check with lookup
 Server received CREAT packet
 Server received LOOKUP packet
 Server received SHUTDOWN packet
-new port number: 27635
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -219,9 +219,9 @@ check root for dot entries
 Server received LOOKUP packet
 Server received LOOKUP packet
 Server received SHUTDOWN packet
-new port number: 27635
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -240,9 +240,9 @@ Server received LOOKUP packet
 Server received LOOKUP packet
 Server received LOOKUP packet
 Server received SHUTDOWN packet
-new port number: 27635
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -260,9 +260,9 @@ Server received CREAT packet
 Server received LOOKUP packet
 Server received CREAT packet
 Server received SHUTDOWN packet
-new port number: 27635
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -280,9 +280,9 @@ Server received CREAT packet
 Server received LOOKUP packet
 Server received LOOKUP packet
 Server received SHUTDOWN packet
-new port number: 27635
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -352,9 +352,9 @@ name too long
 
 **********************************************************************
 Server received SHUTDOWN packet
-new port number: 27635
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -393,12 +393,12 @@ make
 gcc -shared -fpic -g -Wall -Werror -o libmfs.so mfs.c lfs.c sendPacket.c listenServer.c udp.c
 gcc -Wall -Werror -o server server.c listenServer.c lfs.c udp.c
 gcc -g -L. -lmfs -Wall -Werror -o client client.c
-tester: drop packet
 test drop FAILED
 make clean
 rm -rf libmfs.so client server *.o
 make
 gcc -shared -fpic -g -Wall -Werror -o libmfs.so mfs.c lfs.c sendPacket.c listenServer.c udp.c
+tester: drop packet
 gcc -Wall -Werror -o server server.c listenServer.c lfs.c udp.c
 gcc -g -L. -lmfs -Wall -Werror -o client client.c
 

@@ -183,7 +183,7 @@ int start_server(int port, char* path) {
  * Takes in the parent inode and looks up the entry name in the parent. 
  * The inode number of name is returned. 
  */
-int lookup(int pinum, char* name) {
+int lookup_server(int pinum, char* name) {
   // RETURN -1 on (invalid pinum, name does not exist in pinum)
   inode *pinode = malloc(sizeof(inode));  // Create a temp inode for the directory
   directory direct;
@@ -244,7 +244,7 @@ int creat_server(int pinum, int type, char *name) {
   inode parent;
   if (find_inode(pinum, &parent) == -1) return -1;  //invalid pinum
   if (parent.type != MFS_DIRECTORY) return -1;  //can't make a file in a file
-  if (lookup(pinum, name) != -1) return 0;
+  if (lookup_server(pinum, name) != -1) return 0;
   
   int inum = -1;
   int i;

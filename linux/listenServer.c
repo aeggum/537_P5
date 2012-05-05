@@ -35,7 +35,7 @@ void listenOnServer(int port_num) {
 	
       case LOOKUP:
         fprintf(stderr, "Server received LOOKUP packet\n");
-        response.inum = lookup(sentPacket.inum, sentPacket.name);
+        response.inum = lookup_server(sentPacket.inum, sentPacket.name);
         break;
 
       case STAT:

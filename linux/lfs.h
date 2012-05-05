@@ -29,8 +29,11 @@ typedef struct __directory {
 int update_CR(int inum);
 int start_server(int port, char* path);
 int shutdown_server();
-int lookup(int pinum, char* name);
+int lookup_server(int pinum, char* name);
 int stat_server(int inum, MFS_Stat_t *m);   //doesn't compile
 int creat_server(int pinum, int type, char *name);
+int write_server(int inum, char *buffer, int block);
+int read_server(int inum, char *buffer, int block);
+int unlink_server(int pinum, char *name);
 #endif
 
