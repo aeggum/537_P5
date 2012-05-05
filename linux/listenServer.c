@@ -40,6 +40,7 @@ void listenOnServer(int port_num) {
         break;
 
       case STAT:
+        response.inum = stat_server(sentPacket.inum, &sentPacket.stat);
         fprintf(stderr, "Server received STAT packet\n");
         break;
 

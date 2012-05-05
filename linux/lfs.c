@@ -225,7 +225,7 @@ int stat_server(int inum, MFS_Stat_t *m) {
     return -1;    //if the inum doesn't exist, return -1
   
   m->type = node.type;
-  m->size = node.type;
+  m->size = node.size;
   
   return 0;
 }
