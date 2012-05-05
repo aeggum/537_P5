@@ -213,8 +213,6 @@ int lookup_server(int pinum, char* name) {
  * Probably the simplest method in the library, this function returns
  * the relevant information about the file specified by inum. 
  * It puts the information into the struct passed in. 
- * TODO: Get this method in the h file so it can be used. 
- *       I can't get the method to compile, in the h file. 
  */
 int stat_server(int inum, MFS_Stat_t *m) {
   //return information about file given by inum
@@ -330,6 +328,35 @@ int creat_server(int pinum, int type, char *name) {
   update_CR(inum);
 
   return 0;
+}
+
+int write_server(int inum, char *buffer, int block) {
+  inode node;
+  //invalid inum
+  if (find_inode(inum, &node) != 0) 
+    return -1;  
+
+  //invalid file type (directory)
+  if (node.type != MFS_REGULAR_FILE) 
+    return -1;
+
+  //invalid block number (think that this keeps the size in check)
+  if (block < 0 || block > 13) 
+    return -1;
+
+  
+
+  return 0;
+}
+
+
+int read_server(int inum, char *buffer, int block) {
+
+  return -1;
+}
+
+int unlink_server(int pinum, char *name) {
+  return -1;
 }
 
 

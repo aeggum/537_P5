@@ -5,8 +5,8 @@
 #define DIRBYTES      32          //Number of bytes in each directory entry
 #define CRSIZE        6
 #define BLOCKSIZE     4096
-#define DIRECTORY    (0)
-#define REGULAR_FILE (1)
+#define MFS_DIRECTORY    (0)
+#define MFS_REGULAR_FILE (1)
 
 typedef struct __inode {
   int size;
