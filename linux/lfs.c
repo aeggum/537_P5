@@ -191,11 +191,11 @@ int lookup_server(int pinum, char* name) {
   if (find_inode(pinum, pinode) != 0) 
     return -1;  
 
-  //int i;
+  int i;
   int j;
-  //for (i = 0; i < 14; i++) {
+  for (i = 0; i < 14; i++) {
     //if the direct pointer at that location is used
-    //if (pinode->dp_used[i] == 1) {
+    if (pinode->dp_used[i] == 1) {
       lseek(fd, pinode->dpointers[0]*BLOCKSIZE, SEEK_SET);
       read(fd, &direct, BLOCKSIZE);
       for(j = 0; j < 128; j++) {
@@ -203,8 +203,8 @@ int lookup_server(int pinum, char* name) {
           return direct.inums[j];
         }
       }
-    //}
-  //}
+    }
+  }
   return -1;
 }
 
@@ -358,11 +358,9 @@ int write_server(int inum, char *buffer, int block) {
   // write buffer 
   lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
   write(fd, buffer, BLOCKSIZE);
-  //fprintf(stderr, "Writing to inum %d file-block %d, physical block %d\n", inum, block, next_block);
 
   node.dpointers[block] = next_block;
 
-  //fprintf(stderr, "Inode %d dpointer[%d] is %d\n", node.inum, block, node.dpointers[block]);
   if (!node.dp_used[block]) {
     node.dp_used[block] = 1;
     node.size += BLOCKSIZE;
@@ -453,6 +451,7 @@ int unlink_server(int pinum, char *name) {
   inode node;
   find_inode(inum, &node);
 
+  int i;
   int j;
   for(j = 0; j < 128; j++) {
     if(strcmp(direct.names[j], name) == 0) {
@@ -463,7 +462,18 @@ int unlink_server(int pinum, char *name) {
         write(fd, &direct, BLOCKSIZE);
       }
       else {
-        // Check if empty then remove
+        directory tempDir;
+        lseek(fd, node.dpointers[0]*BLOCKSIZE, SEEK_SET);
+        read(fd, &tempDir, BLOCKSIZE);
+        for(i = 2; i < 128; i++) {
+          if(tempDir.inums[i] != -1) {
+            return -1; 
+          }
+        }
+        strcpy(direct.names[j], "DNE\0");
+        direct.inums[j] = -1;
+        lseek(fd, pinode.dpointers[0]*BLOCKSIZE, SEEK_SET);
+        write(fd, &direct, BLOCKSIZE);
       }
     }
   }
