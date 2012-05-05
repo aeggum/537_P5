@@ -24,16 +24,9 @@ void listenOnServer(int port_num) {
       continue;  // does. You'll have to explain that to me.
     else {
       MFS_Packet_t response;
-      
-      // This switch is working now right?...
-      // Going to want to do something more in each case obviously
+            
       switch(sentPacket.method) {
-	
-      case INIT:
-        fprintf(stderr, "Server received INIT packet\n");
-        // NULL CASE
-	    break;
-	
+      
       case LOOKUP:
         fprintf(stderr, "Server received LOOKUP packet\n");
         response.inum = lookup_server(sentPacket.inum, sentPacket.name);
@@ -63,29 +56,25 @@ void listenOnServer(int port_num) {
         response.inum = unlink_server(sentPacket.inum, sentPacket.name);
         fprintf(stderr, "Server received UNLINK packet\n");
         break;
-
-      case SHUTDOWN:
-        fprintf(stderr, "Server received SHUTDOWN packet\n");
-        //shutdown_server();
-        break;
-
-      case RESPONSE:
-        // NULL CASE
-        fprintf(stderr, "Server received RESPONSE packet\n");
-        break;
+	
+      default:  //we do nothing in these cases, just there for compiler
+	fprintf(stderr, "Server receieved RESPONSE, INIT, or CREAT packet\n");
+	break;
       }
-      
+
+      //set message to RESPONSE and tell client we're here, responding
       response.method = RESPONSE;
-      // FROM P5 desciption: "before returning a success code, the file system 
-      // should always fsync() the image" --- Probably want to fsync here (or somewhere)
-      // Fixed missing bracket that screwed stuff up, sorry about that
+      
       if(UDP_Write(sd, &s, (char*)&response, sizeof(MFS_Packet_t)) < 0) {
         fprintf(stderr, "Error sending response from server to client");
       }
+      
+      //doing this outside of the switch so response can be sent beforehand
       if (sentPacket.method == SHUTDOWN) {
 	    shutdown_server();
       }
     } // END else
   } // END while-loop
+  
   fprintf(stderr, "SHOULD NOT GET HERE! THIS WOULD MAKE NO SENSE");
 } // END listenOnServer()

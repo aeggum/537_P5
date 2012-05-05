@@ -23,10 +23,10 @@ Test shutdown
 init server and client then call shutdown
 
 **********************************************************************
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -42,10 +42,10 @@ creat a file and check with lookup
 **********************************************************************
 Server received CREAT packet
 Server received LOOKUP packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -65,10 +65,10 @@ Server received WRITE packet
 Server received READ packet
 Reading from Inode 1 file-block 0, physical block 9
 Inode 1 dpointer[0] is 9
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -88,10 +88,10 @@ Server received STAT packet
 Server received STAT packet
 Server received WRITE packet
 Server received STAT packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -115,10 +115,10 @@ Server received WRITE packet
 Server received READ packet
 Reading from Inode 1 file-block 0, physical block 10
 Inode 1 dpointer[0] is 10
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -190,10 +190,10 @@ Inode 1 dpointer[12] is 21
 Server received READ packet
 Reading from Inode 1 file-block 13, physical block 22
 Inode 1 dpointer[13] is 22
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -268,10 +268,10 @@ Server received READ packet
 Reading from Inode 1 file-block 13, physical block 22
 Inode 1 dpointer[13] is 22
 Server received READ packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -309,10 +309,10 @@ Inode 1 dpointer[13] is 12
 Server received READ packet
 Reading from Inode 1 file-block 0, physical block 11
 Inode 1 dpointer[0] is 11
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -333,10 +333,10 @@ Server received WRITE packet
 Server received WRITE packet
 Server received WRITE packet
 Server received STAT packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -352,10 +352,10 @@ check root for dot entries
 **********************************************************************
 Server received LOOKUP packet
 Server received LOOKUP packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -373,10 +373,10 @@ Server received CREAT packet
 Server received LOOKUP packet
 Server received LOOKUP packet
 Server received LOOKUP packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -393,10 +393,10 @@ try to create a file with a file parent inode
 Server received CREAT packet
 Server received LOOKUP packet
 Server received CREAT packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -413,10 +413,10 @@ try to lookup a file with a file parent inode
 Server received CREAT packet
 Server received LOOKUP packet
 Server received LOOKUP packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -434,10 +434,10 @@ Server received CREAT packet
 Server received LOOKUP packet
 Server received UNLINK packet
 Server received LOOKUP packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -455,10 +455,10 @@ Server received CREAT packet
 Server received LOOKUP packet
 Server received UNLINK packet
 Server received LOOKUP packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -479,10 +479,10 @@ Server received LOOKUP packet
 Server received UNLINK packet
 Server received UNLINK packet
 Server received UNLINK packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -496,10 +496,10 @@ Test name
 name too long
 
 **********************************************************************
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -520,19 +520,19 @@ Server received LOOKUP packet
 Server received READ packet
 Reading from Inode 1 file-block 0, physical block 9
 Inode 1 dpointer[0] is 9
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 Server received LOOKUP packet
 Server received READ packet
 Reading from Inode 1 file-block 0, physical block 9
 Inode 1 dpointer[0] is 9
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
@@ -581,8 +581,6 @@ Server received CREAT packet
 tester: drop packet
 Server received CREAT packet
 tester: drop packet
-Server received CREAT packet
-tester: drop packet
 Server received LOOKUP packet
 tester: drop packet
 Server received LOOKUP packet
@@ -592,18 +590,6 @@ tester: drop packet
 Server received LOOKUP packet
 tester: drop packet
 Server received LOOKUP packet
-tester: drop packet
-Server received LOOKUP packet
-tester: drop packet
-Server received LOOKUP packet
-tester: drop packet
-Server received LOOKUP packet
-tester: drop packet
-Server received LOOKUP packet
-tester: drop packet
-Server received LOOKUP packet
-tester: drop packet
-Server received WRITE packet
 tester: drop packet
 Server received WRITE packet
 tester: drop packet
@@ -620,33 +606,32 @@ tester: drop packet
 Server received WRITE packet
 tester: drop packet
 Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
+Reading from Inode 1 file-block 0, physical block 15
+Inode 1 dpointer[0] is 15
 tester: drop packet
 Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
+Reading from Inode 1 file-block 0, physical block 15
+Inode 1 dpointer[0] is 15
 tester: drop packet
 Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
+Reading from Inode 1 file-block 0, physical block 15
+Inode 1 dpointer[0] is 15
 tester: drop packet
 Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
+Reading from Inode 1 file-block 0, physical block 15
+Inode 1 dpointer[0] is 15
 tester: drop packet
 Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
+Reading from Inode 1 file-block 0, physical block 15
+Inode 1 dpointer[0] is 15
 tester: drop packet
 Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
+Reading from Inode 1 file-block 0, physical block 15
+Inode 1 dpointer[0] is 15
 tester: drop packet
 Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
-tester: drop packet
+Reading from Inode 1 file-block 0, physical block 15
+Inode 1 dpointer[0] is 15
 make clean
 rm -rf libmfs.so client server *.o
 make
@@ -6035,10 +6020,10 @@ Server received LOOKUP packet
 Server received LOOKUP packet
 Server received LOOKUP packet
 Server received LOOKUP packet
-Server received SHUTDOWN packet
-new port number: 27635
+Server receieved RESPONSE, INIT, or CREAT packet
+new port number: 31670
 inside the start_server() method
-calling to listen on port: 27635
+calling to listen on port: 31670
 starting the server (listening) in server.c
 
 
