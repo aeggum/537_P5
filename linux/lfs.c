@@ -333,35 +333,41 @@ int creat_server(int pinum, int type, char *name) {
 int write_server(int inum, char *buffer, int block) {
   inode node;
   //invalid inum
-  if (find_inode(inum, &node) != 0) 
+  if (find_inode(inum, &node) != 0) {
+    fprintf(stderr, "WRITE: invalid inum");
     return -1;  
+  }
 
   //invalid file type (directory)
-  if (node.type != MFS_REGULAR_FILE) 
+  if (node.type != MFS_REGULAR_FILE) {
+    fprintf(stderr, "WRITE: invalid file type");
     return -1;
+  }
 
   //invalid block number (think that this keeps the size in check)
-  if (block < 0 || block > 13) 
+  if (block < 0 || block > 13) {
+    fprintf(stderr, "WRITE: invalid block number");
     return -1;
+  }
 
   //write buffer into memory (write)
   //update inode.dpointers[block] to be address of next_block
   //update the inode size, next_block, imap, update_CR()
   
 
-  // write inode 
+  // write buffer 
   lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
   write(fd, buffer, sizeof(BLOCKSIZE));
-  next_block++;
 
-  node.dp_used[block] = 1;
   node.dpointers[block] = next_block*BLOCKSIZE;
-  if (!node.dp_used[block]) 
+  if (!node.dp_used[block]) {
     node.size += BLOCKSIZE;
-
+    node.dp_used[block] = 1;
+  }
   //maybe need to update the imap
 
   //update the checkpoint region
+  next_block++;
   update_CR(inum);
 
   return 0;
