@@ -196,7 +196,7 @@ int lookup(int pinum, char* name) {
   for (i = 0; i < 14; i++) {
     //if the direct pointer at that location is used
     if (pinode->dp_used[i] == 1) {
-      lseek(fd, parent.dpointers[i]*BLOCKSIZE, SEEK_SET);
+      lseek(fd, pinode->dpointers[i]*BLOCKSIZE, SEEK_SET);
       read(fd, &direct, BLOCKSIZE);
       for(j = 0; j < 128; j++) {
         if(strcmp(direct.names[j], name) == 0) {

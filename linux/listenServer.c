@@ -53,6 +53,7 @@ void listenOnServer(int port_num) {
 
       case CREAT:
         printf("Server received CREAT packet\n");
+	response.inum = creat_server(sentPacket.inum, sentPacket.type, sentPacket.name);
         break;
 
       case UNLINK:
