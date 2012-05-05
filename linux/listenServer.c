@@ -34,7 +34,7 @@ void listenOnServer(int port_num) {
 	    break;
 	
       case LOOKUP:  // Fill in "response" packet after using info from "sentPacket"
-        fprintf(stderr, "Server received CREAT packet\n");
+        fprintf(stderr, "Server received LOOKUP packet\n");
         // Call lookup() in lfs.c w/ pinum(sentPacket.inum) and name of file to find
         response.inum = lookup(sentPacket.inum, sentPacket.name);
         break;
