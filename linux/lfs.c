@@ -433,7 +433,43 @@ int read_server(int inum, char *buffer, int block) {
 }
 
 int unlink_server(int pinum, char *name) {
-  return -1;
+  inode pinode;
+  // Invalid pinum
+  if (find_inode(pinum, &pinode) != 0) {
+    fprintf(stderr, "UNLINK: invalid inum\n");
+    return -1;  
+  }
+  // Check pinum refers to a directory
+  if(pinode.type != MFS_DIRECTORY) {
+    return -1;
+  }
+  
+  directory direct;
+  lseek(fd, pinode.dpointers[0]*BLOCKSIZE, SEEK_SET);
+  read(fd, &direct, BLOCKSIZE);
+
+  int inum = lookup_server(pinum,name);
+  if(inum < 0) return 0;
+  inode node;
+  find_inode(inum, &node);
+
+  int j;
+  for(j = 0; j < 128; j++) {
+    if(strcmp(direct.names[j], name) == 0) {
+      if(node.type == MFS_REGULAR_FILE) {
+        strcpy(direct.names[j], "DNE\0");
+        direct.inums[j] = -1;
+        lseek(fd, pinode.dpointers[0]*BLOCKSIZE, SEEK_SET);
+        write(fd, &direct, BLOCKSIZE);
+      }
+      else {
+        // Check if empty then remove
+      }
+    }
+  }
+
+  // Remember to lseek/write pinode to actual physical location
+  return 0;
 }
 
 
