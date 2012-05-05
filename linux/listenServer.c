@@ -60,6 +60,7 @@ void listenOnServer(int port_num) {
         break;
 
       case UNLINK:
+        response.inum = unlink_server(sentPacket.inum, sentPacket.name);
         fprintf(stderr, "Server received UNLINK packet\n");
         break;
 

@@ -191,20 +191,20 @@ int lookup_server(int pinum, char* name) {
   if (find_inode(pinum, pinode) != 0) 
     return -1;  
 
-  int i;
+  //int i;
   int j;
-  for (i = 0; i < 14; i++) {
+  //for (i = 0; i < 14; i++) {
     //if the direct pointer at that location is used
-    if (pinode->dp_used[i] == 1) {
-      lseek(fd, pinode->dpointers[i]*BLOCKSIZE, SEEK_SET);
+    //if (pinode->dp_used[i] == 1) {
+      lseek(fd, pinode->dpointers[0]*BLOCKSIZE, SEEK_SET);
       read(fd, &direct, BLOCKSIZE);
       for(j = 0; j < 128; j++) {
         if(strcmp(direct.names[j], name) == 0) {
           return direct.inums[j];
         }
       }
-    }
-  }
+    //}
+  //}
   return -1;
 }
 
