@@ -365,6 +365,7 @@ int write_server(int inum, char *buffer, int block) {
     node.dp_used[block] = 1;
     node.size += BLOCKSIZE;
   }
+
   // TODO: Actually do this
   if(node.dp_used[13]) 
     node.size = 14*BLOCKSIZE;
@@ -477,8 +478,10 @@ int unlink_server(int pinum, char *name) {
       }
     }
   }
-
-  // Remember to lseek/write pinode to actual physical location
+  
+  //update the imap, by now we have removed the node at inum or returned an error.
+  imap[inum] = -1; 
+  update_CR(inum);
   return 0;
 }
 
