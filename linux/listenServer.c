@@ -45,10 +45,12 @@ void listenOnServer(int port_num) {
 
       case WRITE:
         fprintf(stderr, "Server received WRITE packet\n");
+	response.inum = write_server(sentPacket.inum, sentPacket.buffer, sentPacket.block);
         break;
 
       case READ:
         fprintf(stderr, "Server received READ packet\n");
+	response.inum = read_server(sentPacket.inum, sentPacket.buffer, sentPacket.block);
         break;
 
       case CREAT:

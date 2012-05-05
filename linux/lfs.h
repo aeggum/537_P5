@@ -10,7 +10,7 @@
 
 typedef struct __inode {
   int size;
-  int type; // DIRECTORY or REGULAR_FILE
+  int type; //MFS_DIRECTORY or MFS_REGULAR_FILE
   int inum;
   //need something for direct pointers..
   int dpointers[14];  //used for direct pointers (LFS)
@@ -20,7 +20,7 @@ typedef struct __inode {
 
 typedef struct __directory {
   int inums[128];
-  char names[128][28];      //could do a char* but this is fixed..
+  char names[128][28];      //could do a char* but this is fixed size
   //the above is my best guess after having read the book
 } directory;
 

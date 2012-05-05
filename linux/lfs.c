@@ -344,15 +344,75 @@ int write_server(int inum, char *buffer, int block) {
   if (block < 0 || block > 13) 
     return -1;
 
+  //write buffer into memory (write)
+  //update inode.dpointers[block] to be address of next_block
+  //update the inode size, next_block, imap, update_CR()
   
+
+  // write inode 
+  lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
+  write(fd, buffer, sizeof(BLOCKSIZE));
+  next_block++;
+
+  node.dp_used[block] = 1;
+  node.dpointers[block] = next_block*BLOCKSIZE;
+  if (!node.dp_used[block]) 
+    node.size += BLOCKSIZE;
+
+  //maybe need to update the imap
+
+  //update the checkpoint region
+  update_CR(inum);
 
   return 0;
 }
 
 
 int read_server(int inum, char *buffer, int block) {
+  inode node;
+  //invalid inum
+  if (find_inode(inum, &node) != 0) 
+    return -1;
+  
+  //invalid block number
+  if (block < 0 || block > 13) 
+    return -1;
 
-  return -1;
+  if (node.type == MFS_REGULAR_FILE) {
+    lseek(fd, node.dpointers[block], SEEK_SET);
+    read(fd, buffer, BLOCKSIZE);
+    //node.dpointers[block];
+  }
+  else  {    //MFS_DIRECTORY
+    MFS_DirEnt_t dirEnt;    //name and inum
+    int pinum = node.dpointers[1];      //get parent inum
+    inode pnode;
+    find_inode(pinum, &pnode);          //get the parent inode
+    
+    directory direct;
+    //get the inode associated with the passed in pinum                                         
+    int i;
+    int j;
+    for (i = 0; i < 14; i++) {
+      //if the direct pointer at that location is used                                          
+      if (pnode.dp_used[i] == 1) {
+	lseek(fd, pnode.dpointers[i]*BLOCKSIZE, SEEK_SET);
+	read(fd, &direct, BLOCKSIZE);
+	for(j = 0; j < 128; j++) {
+	  if(direct.inums[j] == inum) {
+	    strcpy(dirEnt.name, direct.names[j]);
+	    dirEnt.inum = inum;
+	  }
+	}
+      }
+    }
+
+    memcpy(buffer, &dirEnt, sizeof(MFS_DirEnt_t));
+
+  }
+
+  
+  return 0;
 }
 
 int unlink_server(int pinum, char *name) {
