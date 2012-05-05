@@ -58,7 +58,7 @@ void listenOnServer(int port_num) {
         break;
 	
       default:  //we do nothing in these cases, just there for compiler
-	fprintf(stderr, "Server receieved RESPONSE, INIT, or CREAT packet\n");
+	fprintf(stderr, "Server receieved RESPONSE, INIT, or SHUTDOWN packet\n");
 	break;
       }
 
