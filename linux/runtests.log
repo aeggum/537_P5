@@ -577,16 +577,6 @@ Server received CREAT packet
 tester: drop packet
 Server received CREAT packet
 tester: drop packet
-Server received CREAT packet
-tester: drop packet
-Server received CREAT packet
-tester: drop packet
-Server received LOOKUP packet
-tester: drop packet
-Server received LOOKUP packet
-tester: drop packet
-Server received LOOKUP packet
-tester: drop packet
 Server received LOOKUP packet
 tester: drop packet
 Server received WRITE packet
@@ -599,40 +589,9 @@ Server received WRITE packet
 tester: drop packet
 Server received WRITE packet
 tester: drop packet
-Server received WRITE packet
-tester: drop packet
-Server received WRITE packet
-tester: drop packet
-Server received WRITE packet
-tester: drop packet
 Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
-tester: drop packet
-Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
-tester: drop packet
-Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
-tester: drop packet
-Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
-tester: drop packet
-Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
-tester: drop packet
-Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
-tester: drop packet
-Server received READ packet
-Reading from Inode 1 file-block 0, physical block 16
-Inode 1 dpointer[0] is 16
-tester: drop packet
+Reading from Inode 1 file-block 0, physical block 13
+Inode 1 dpointer[0] is 13
 make clean
 rm -rf libmfs.so client server *.o
 make
