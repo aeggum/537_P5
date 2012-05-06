@@ -22,6 +22,7 @@ struct superblock {
 #define NINDIRECT (BSIZE / sizeof(uint))
 #define MAXFILE (NDIRECT + NINDIRECT)
 
+//will not be changing the inode structure
 // On-disk inode structure
 struct dinode {
   short type;           // File type

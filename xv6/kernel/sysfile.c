@@ -227,8 +227,9 @@ create(char *path, short type, short major, short minor)
     if(type == T_FILE && ip->type == T_FILE)
       return ip;
     
+    //return the inode if found and type is CHECKED
     else if (type == T_CHECKED && ip->type == T_CHECKED) {
-
+      return ip;
     }
     iunlockput(ip);
     return 0;
@@ -243,6 +244,7 @@ create(char *path, short type, short major, short minor)
   ip->nlink = 1;
   iupdate(ip);
 
+  //shouldn't need to make any changes for directories, per directions
   if(type == T_DIR){  // Create . and .. entries.
     dp->nlink++;  // for ".."
     iupdate(dp);
