@@ -334,6 +334,7 @@ bmap(struct inode *ip, uint bn)
   }
   bn -= NDIRECT;
 
+  // TODO: Deal with indirect block references
   if(bn < NINDIRECT){
     // Load indirect block, allocating if necessary.
     if((addr = ip->addrs[NDIRECT]) == 0)
@@ -451,6 +452,8 @@ writei(struct inode *ip, char *src, uint off, uint n)
     memmove(bp->data + off%BSIZE, src, m);
     bwrite(bp);
     brelse(bp);
+   // TODO: XOR all the data block bytes from bp store into ip->addr[off/BSIZE]
+    
   }
 
   if(n > 0 && off > ip->size){
