@@ -18,8 +18,9 @@ a method of a specified type is received.  Most of the work takes place in lfs.c
 In sending back the packet, the server uses the inum field of the server as a 
 return status, and the client checks that field to determine success or failure. 
 
-We currently pass 24 out of 27 tests but that value will hopefully move up to 27
-before too long.  
+We pass all of the tests, 27 out of 27.  The runtests are saved in runtests.log.
+
+
 
 XV6:
 We haven't started on this part of the project yet, so it probably passes 2 out
