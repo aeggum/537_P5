@@ -19,32 +19,27 @@ test build PASSED
 
 **********************************************************************
 
-Test stat2
-stat a sparse file
+Test shutdown
+init server and client then call shutdown
 
 **********************************************************************
-Server received CREAT packet
-Server received LOOKUP packet
-Server received WRITE packet
-Server received WRITE packet
-Server received WRITE packet
-Server received WRITE packet
-Server received STAT packet
-test stat2 FAILED
+Server receieved RESPONSE, INIT, or SHUTDOWN packet
+new port number: 31670
+inside the start_server() method
+calling to listen on port: 31670
+starting the server (listening) in server.c
 
 
-test stat2 FAILED
- (stat a sparse file)
- Stat gave wrong size
+test shutdown PASSED
+ (init server and client then call shutdown)
 
 **********************************************************************
 Summary:
 test build PASSED
  (build project using make)
 
-test stat2 FAILED
- (stat a sparse file)
- Stat gave wrong size
+test shutdown PASSED
+ (init server and client then call shutdown)
 
-Passed 1 of 2 tests.
-Overall 1 of 2
+Passed 2 of 2 tests.
+Overall 2 of 2
