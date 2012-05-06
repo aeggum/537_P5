@@ -10,18 +10,16 @@
 
 typedef struct __inode {
   int size;
-  int type; //MFS_DIRECTORY or MFS_REGULAR_FILE
+  int type;           //MFS_DIRECTORY or MFS_REGULAR_FILE
   int inum;
-  //need something for direct pointers..
   int dpointers[14];  //used for direct pointers (LFS)
-  //bool used[14];   (don't know how to use booleans in header files)
+  //bool used[14];    (don't know how to use booleans in header files)
   int dp_used[14];    //used to tell if direct pointer at [i] is used
 } inode;
 
 typedef struct __directory {
   int inums[128];
   char names[128][28];      //could do a char* but this is fixed size
-  //the above is my best guess after having read the book
 } directory;
 
 

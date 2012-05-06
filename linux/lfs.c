@@ -12,7 +12,6 @@
 
 int imap[MAXINODES];   //Inode map points to addresses of Inodes (size 4096)
 int next_block;        //next block in the AS to be written (ie end of the log)
-bool new;
 int fd;
 
 /**
@@ -111,7 +110,6 @@ int start_server(int port, char* path) {
   fd = open(path, O_RDWR);
   printf("inside the start_server() method\n");
   if (fd == -1) {  //file does not exist already, START CREATION
-    new = true;
     fd = open(path, O_RDWR|O_CREAT|O_TRUNC, S_IRWXU);
     if (fd == -1) return -1;
     next_block = CRSIZE;
@@ -166,7 +164,6 @@ int start_server(int port, char* path) {
     update_CR(0);
   } // END NEW FILE CREATION
   else {
-    new = false;
     lseek(fd, 0, SEEK_SET);
     read(fd, imap, sizeof(int)*MAXINODES);
     read(fd, &next_block, sizeof(int));
@@ -212,12 +209,11 @@ int lookup_server(int pinum, char* name) {
 /**
  * Probably the simplest method in the library, this function returns
  * the relevant information about the file specified by inum. 
- * It puts the information into the struct passed in. 
+ * 
+ * It finds the relevant inode (from inum) and fills in the passed 
+ * in struct's information with the information from the inode
  */
 int stat_server(int inum, MFS_Stat_t *m) {
-  //return information about file given by inum
-  //...so we should get the inode related to inum, then fill in m
-  //to fill in MFS_Stat_t, there is type and size int fields only
   inode node; 
   if (find_inode(inum, &node) == -1) 
     return -1;    //if the inum doesn't exist, return -1
@@ -330,6 +326,15 @@ int creat_server(int pinum, int type, char *name) {
   return 0;
 }
 
+
+/**
+ * First checks for three error cases: 1) invalid inum, 2) invalid file type,
+ * 3) invalid block number (outside of the valid range).  After that, we 
+ * write the buffer into memory by seeking to where it needs to be written, then
+ * setting up information in the inode we're writing out.  last, it writes the 
+ * inode out to memory and updates the checkpoint region and imap. 
+ */
+//TODO: Actually write the file size out correctly.  That may be one of the last few bugs. 
 int write_server(int inum, char *buffer, int block) {
   inode node;
   //invalid inum
@@ -358,7 +363,6 @@ int write_server(int inum, char *buffer, int block) {
   // write buffer 
   lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
   write(fd, buffer, BLOCKSIZE);
-
   node.dpointers[block] = next_block;
 
   if (!node.dp_used[block]) {
@@ -382,6 +386,15 @@ int write_server(int inum, char *buffer, int block) {
 }
 
 
+/**
+ * First checks for error cases, checking first for an invalid inum passed in, then
+ * a block number out of range (< 0 or > 13). 
+ * From there, if the file is a regular file, it seeks to the block given by its' direct
+ * pointer, reads it into buffer and then returns.  
+ * If the file is a directory, things are a little more complicated.  We get the parent
+ * inode and search through the directories of the parent and fills in a DirEnt struct
+ * when a match is found.  It finishes by copying the memory using a memcpy.
+ */
 int read_server(int inum, char *buffer, int block) {
   inode node;
   //invalid inum
@@ -426,11 +439,24 @@ int read_server(int inum, char *buffer, int block) {
     memcpy(buffer, &dirEnt, sizeof(MFS_DirEnt_t));
 
   }
-
   
   return 0;
 }
 
+
+/**
+ * Romeves the file or directory (if empty) 'name' from the directory specified by 
+ * pinum.  It gets the parent inode, makes certain it is a directory first.  If no errors
+ * it fills a directory struct with the contents of the pinodes' directory.   
+ * It gets the inode of the child we want to remove.  
+ *
+ * We then search through the directory mentioned earlier.  If we find a match of
+ * the name, if it's a regular file, we clear the directory entry and write to disk. 
+ * If it's a directory itself, we check if it is empty. If it's not, an error is 
+ * returned.  If it is, we clear it just the same, write to disk.
+ *
+ * Lastly we clear the imap of the inode number removed and update the CR, and return.
+ */
 int unlink_server(int pinum, char *name) {
   inode pinode;
   // Invalid pinum
@@ -443,25 +469,34 @@ int unlink_server(int pinum, char *name) {
     return -1;
   }
   
+  //find and fill in the directory relating to the parent
   directory direct;
   lseek(fd, pinode.dpointers[0]*BLOCKSIZE, SEEK_SET);
   read(fd, &direct, BLOCKSIZE);
-
-  int inum = lookup_server(pinum,name);
+  
+  //get the inode number of the child we want to remove/unlink
+  int inum = lookup_server(pinum, name);
   if(inum < 0) return 0;
+  
+  //get the inode of the child to remove/unlink
   inode node;
   find_inode(inum, &node);
 
   int i;
   int j;
+  //look through directory, looking for match of the name
   for(j = 0; j < 128; j++) {
     if(strcmp(direct.names[j], name) == 0) {
+      
+      //if regular file, just clear and write to disk. 
       if(node.type == MFS_REGULAR_FILE) {
         strcpy(direct.names[j], "DNE\0");
         direct.inums[j] = -1;
         lseek(fd, pinode.dpointers[0]*BLOCKSIZE, SEEK_SET);
         write(fd, &direct, BLOCKSIZE);
       }
+      
+      //if directory, search through it in same manner, then clear and write to disk.
       else {
         directory tempDir;
         lseek(fd, node.dpointers[0]*BLOCKSIZE, SEEK_SET);
@@ -479,7 +514,7 @@ int unlink_server(int pinum, char *name) {
     }
   }
   
-  //update the imap, by now we have removed the node at inum or returned an error.
+  //update the imap. by now we have removed the node at inum, or returned an error.
   imap[inum] = -1; 
   update_CR(inum);
   return 0;
