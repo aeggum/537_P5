@@ -23,9 +23,9 @@ Test shutdown
 init server and client then call shutdown
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -39,9 +39,9 @@ Test creat
 creat a file and check with lookup
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -57,9 +57,9 @@ write then read one block
 **********************************************************************
 Reading from Inode 1 file-block 0, physical block 9
 Inode 1 dpointer[0] is 9
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -73,9 +73,9 @@ Test stat
 stat a regular file
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -93,9 +93,9 @@ Reading from Inode 1 file-block 0, physical block 9
 Inode 1 dpointer[0] is 9
 Reading from Inode 1 file-block 0, physical block 10
 Inode 1 dpointer[0] is 10
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -137,9 +137,9 @@ Reading from Inode 1 file-block 12, physical block 21
 Inode 1 dpointer[12] is 21
 Reading from Inode 1 file-block 13, physical block 22
 Inode 1 dpointer[13] is 22
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -182,9 +182,9 @@ Reading from Inode 1 file-block 12, physical block 21
 Inode 1 dpointer[12] is 21
 Reading from Inode 1 file-block 13, physical block 22
 Inode 1 dpointer[13] is 22
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -210,9 +210,9 @@ Reading from Inode 1 file-block 13, physical block 12
 Inode 1 dpointer[13] is 12
 Reading from Inode 1 file-block 0, physical block 11
 Inode 1 dpointer[0] is 11
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -226,9 +226,9 @@ Test stat2
 stat a sparse file
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -242,9 +242,9 @@ Test dir1
 check root for dot entries
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -258,9 +258,9 @@ Test dir2
 create a new directory and check it
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -274,9 +274,9 @@ Test baddir
 try to create a file with a file parent inode
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -290,9 +290,9 @@ Test baddir2
 try to lookup a file with a file parent inode
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -306,9 +306,9 @@ Test unlink
 unlink a file
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -322,9 +322,9 @@ Test unlink2
 unlink a directory
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -338,9 +338,9 @@ Test empty
 unlink a non-empty directory
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -354,9 +354,9 @@ Test name
 name too long
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -372,15 +372,15 @@ restart server after creating a file
 **********************************************************************
 Reading from Inode 1 file-block 0, physical block 9
 Inode 1 dpointer[0] is 9
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 Reading from Inode 1 file-block 0, physical block 9
 Inode 1 dpointer[0] is 9
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -419,8 +419,33 @@ tester: drop packet
 tester: drop packet
 tester: drop packet
 tester: drop packet
-Reading from Inode 1 file-block 0, physical block 13
-Inode 1 dpointer[0] is 13
+tester: drop packet
+tester: drop packet
+tester: drop packet
+Reading from Inode 1 file-block 0, physical block 14
+Inode 1 dpointer[0] is 14
+tester: drop packet
+Reading from Inode 1 file-block 0, physical block 14
+Inode 1 dpointer[0] is 14
+tester: drop packet
+Reading from Inode 1 file-block 0, physical block 14
+Inode 1 dpointer[0] is 14
+tester: drop packet
+Reading from Inode 1 file-block 0, physical block 14
+Inode 1 dpointer[0] is 14
+tester: drop packet
+Reading from Inode 1 file-block 0, physical block 14
+Inode 1 dpointer[0] is 14
+tester: drop packet
+Reading from Inode 1 file-block 0, physical block 14
+Inode 1 dpointer[0] is 14
+tester: drop packet
+Reading from Inode 1 file-block 0, physical block 14
+Inode 1 dpointer[0] is 14
+tester: drop packet
+Reading from Inode 1 file-block 0, physical block 14
+Inode 1 dpointer[0] is 14
+tester: drop packet
 make clean
 rm -rf libmfs.so client server *.o
 make
@@ -439,9 +464,9 @@ Test bigdir
 create a directory with max number of files
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -455,9 +480,9 @@ Test bigdir2
 create a directory with more files than possible
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -471,9 +496,9 @@ Test deep
 create many deeply nested directories
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -615,9 +640,9 @@ Inode 35 dpointer[2] is 87
 checking /2/0/file1
 Reading from Inode 36 file-block 0, physical block 88
 Inode 36 dpointer[0] is 88
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -1113,9 +1138,9 @@ Inode 119 dpointer[4] is 306
 checking /2/0/0/file1
 Reading from Inode 120 file-block 0, physical block 307
 Inode 120 dpointer[0] is 307
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -1611,9 +1636,9 @@ Inode 119 dpointer[4] is 306
 checking /2/0/0/file1
 Reading from Inode 120 file-block 0, physical block 307
 Inode 120 dpointer[0] is 307
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 checking /1/1/1/file2
 Reading from Inode 73 file-block 0, physical block 212
@@ -1975,9 +2000,9 @@ Inode 119 dpointer[4] is 306
 checking /2/0/0/file1
 Reading from Inode 120 file-block 0, physical block 307
 Inode 120 dpointer[0] is 307
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 
@@ -1991,9 +2016,9 @@ Test free
 check that inodes and direcrtory entries are freed
 
 **********************************************************************
-new port number: 31670
+new port number: 27635
 inside the start_server() method
-calling to listen on port: 31670
+calling to listen on port: 27635
 starting the server (listening) in server.c
 
 

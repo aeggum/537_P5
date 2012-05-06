@@ -367,15 +367,11 @@ int write_server(int inum, char *buffer, int block) {
 
   if (!node.dp_used[block]) {
     node.dp_used[block] = 1;
-    node.size += BLOCKSIZE;
   }
   
-  //this gets the tests to all pass...why is that?
-  //node.size = (block+1)*BLOCKSIZE > node.size ? (block+1)*BLOCKSIZE : node.size;
-  
-  // TODO: Actually do this
-  if(node.dp_used[13]) 
-    node.size = 14*BLOCKSIZE;
+  // update the file size to be largest x of (dp_used[x] == 1) * BLOCKSIZE
+  if((block + 1) * BLOCKSIZE > node.size)
+    node.size = (block + 1) * BLOCKSIZE;
 
   // Write the Inode data
   lseek(fd, imap[inum]*BLOCKSIZE, SEEK_SET);
