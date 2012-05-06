@@ -1,3 +1,36 @@
+CS 537 - Operating Systems
+Project 5
+
+Name: Adam Eggum
+ID: 906 075 3473
+CS: eggum
+
+Name: Matt Schleifer
+ID: 906 181 8341
+CS schleife
+
+LINUX:
+Our network file server does everything that is specified.  The client library 
+exports the interfaces in MFS.c.  The client sends packet structures to the 
+server, and the server listens on the specified port (for up to 3 seconds) until 
+a method of a specified type is received.  Most of the work takes place in lfs.c.
+
+In sending back the packet, the server uses the inum field of the server as a 
+return status, and the client checks that field to determine success or failure. 
+
+We currently pass 24 out of 27 tests but that value will hopefully move up to 27
+before too long.  
+
+XV6:
+We haven't started on this part of the project yet, so it probably passes 2 out
+of all of the tests.  Not too shabby. 
+
+
+
+
+
+OLD README
+-----------------------------------------------------------------------------------
 I had some time to burn so I went through and added to the rest of mfs.c.  
 Most of the file is complete now, but there are a few bits that I wasn't able to
 get to.  (Such as MFS_Read(), returning the data in the right format).
