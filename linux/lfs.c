@@ -369,7 +369,10 @@ int write_server(int inum, char *buffer, int block) {
     node.dp_used[block] = 1;
     node.size += BLOCKSIZE;
   }
-
+  
+  //this gets the tests to all pass...why is that?
+  //node.size = (block+1)*BLOCKSIZE > node.size ? (block+1)*BLOCKSIZE : node.size;
+  
   // TODO: Actually do this
   if(node.dp_used[13]) 
     node.size = 14*BLOCKSIZE;
