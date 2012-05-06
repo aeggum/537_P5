@@ -325,7 +325,10 @@ bmap(struct inode *ip, uint bn)
   //TODO: Will have to change in some way when addresses are dealt with
 
   if(bn < NDIRECT){
-    if((addr = ip->addrs[bn]) == 0)
+    addr = ip->addrs[bn];
+    if(ip->type == T_CHECKED)
+      addr = addr & 0x0FFF;
+    if(addr == 0)
       ip->addrs[bn] = addr = balloc(ip->dev);
     return addr;
   }
