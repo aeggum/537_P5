@@ -4,7 +4,16 @@
 #include "mfs.h"
 
 
-//Call a method to open a port and keep it open, listening.                   
+//Call a method to open a port and keep it open, listening.                
+/**
+ * This method is used by the server as a way to keep listening 
+ * on a given port number. It opens the given port_num and then
+ * stays in a loop, accepting messages of a certain type.  
+ * 
+ * To do the correct server call, we use a simple switch statement
+ * and use the response packet's inode number field as a success
+ * or failure field when sending the packet back to the client.
+ */   
 void listenOnServer(int port_num) {
   int sd = UDP_Open(port_num);
   if (sd < 0) {   
@@ -24,7 +33,8 @@ void listenOnServer(int port_num) {
       continue;  // does. You'll have to explain that to me.
     else {
       MFS_Packet_t response;
-            
+      
+      //check to see what method we are to run; note the default at the end
       switch(sentPacket.method) {
       
       case LOOKUP:
