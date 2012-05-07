@@ -452,7 +452,19 @@ writei(struct inode *ip, char *src, uint off, uint n)
     memmove(bp->data + off%BSIZE, src, m);
     bwrite(bp);
     brelse(bp);
-   // TODO: XOR all the data block bytes from bp store into ip->addr[off/BSIZE]
+    uchar checksum = 0;
+    int i; 
+    for (i = 0; i < 512; i++) {
+      checksum ^= bp->data[i];
+    }
+    
+   
+    ip->addrs[off/BSIZE] = ip->addrs[off/BSIZE];  //not sure how to do any shifting, etc. 
+    //checksum = checksum & 0xf000;  can't do this (compiler says overflow.)
+                             //don't know if we'd want to, anyways
+    //ip->addr[off/BSIZE] = 
+    //cprintf("ip->address[off/BSIZE]: %d\n", ip->addrs[off/BSIZE]);
+   // TODO: XOR all the data block bytes from bp store into ip->addrs[off/BSIZE]
     
   }
 
