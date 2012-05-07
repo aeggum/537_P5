@@ -232,6 +232,9 @@ int stat_server(int inum, MFS_Stat_t *m) {
  *
  * Otherwise, tries to find a slot and then makes a file in the parent's 
  * directory.  More comments are listed throughout. 
+ *
+ * Note: poor naming convention
+ * Couldn't use creat itself as there is of course the syscall of the same name
  */
 int creat_server(int pinum, int type, char *name) {
   //if server already exists, return a success (as specified)
@@ -257,7 +260,7 @@ int creat_server(int pinum, int type, char *name) {
   /*
    * look at the direct ponters of parent, try to find an open slot to place
    * the new child.  each time it finds a parent that doesn't match, it does 
-   * some other stuff. 
+   * some other stuff. (ie. builds the directory block)
    */
   for (b = 0; b < 14; b++) {
     if (parent.dp_used[b]) {
@@ -265,9 +268,56 @@ int creat_server(int pinum, int type, char *name) {
       read(fd, &block, BLOCKSIZE);
 
       for (e = 0; e < 128; e++) {
-	    if (block.inums[e] == -1)
-	      goto found_slot;  //we found a slot for the file to go
-	                        //and then use some c magic with a goto
+	if (block.inums[e] == -1) {
+    
+	  //now we have found a slot for the file to go...
+          lseek(fd, imap[pinum]*BLOCKSIZE, SEEK_SET);
+	  write(fd, &parent, BLOCKSIZE);
+	  block.inums[e] = inum;
+	  strcpy(block.names[e], name);
+	  lseek(fd, parent.dpointers[b]*BLOCKSIZE, SEEK_SET);
+	  write(fd, &block, BLOCKSIZE);
+	  
+	  
+	  //create inode, init direct pointers
+	  inode n;
+	  n.inum = inum;
+	  n.size = 0;
+	  for (i = 0; i < 14; i++) {
+	    n.dp_used[i] = 0;
+	    n.dpointers[i] = -1;
+	  }
+	  n.type = type;
+	  
+	  //must do some more work if we're making a directory
+	  if (type == MFS_DIRECTORY) {
+	    n.dp_used[0] = 1;
+	    n.dpointers[0] = next_block;
+	    
+	    build_dir_block(1, inum, pinum);
+	    
+	    // update the file size
+	    n.size += BLOCKSIZE;
+	  }
+	  
+	  //there probably aren't any tests against this but nonetheless
+	  if (type != MFS_DIRECTORY && type != MFS_REGULAR_FILE) {
+	    return -1;
+	  }
+	  
+	  // update imap
+	  imap[inum] = next_block;
+	  
+	  // write inode
+	  lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
+	  write(fd, &n, sizeof(inode));
+	  next_block++;
+	  
+	  // write checkpoint region
+	  update_CR(inum);
+	  
+	  return 0;
+	}
       }
     }
     else {
@@ -280,52 +330,8 @@ int creat_server(int pinum, int type, char *name) {
   }
   
   return -1;   //when the directory is full
-  
- found_slot:
-  lseek(fd, imap[pinum]*BLOCKSIZE, SEEK_SET);
-  write(fd, &parent, BLOCKSIZE);
-  block.inums[e] = inum;
-  strcpy(block.names[e], name);
-  lseek(fd, parent.dpointers[b]*BLOCKSIZE, SEEK_SET);
-  write(fd, &block, BLOCKSIZE);
-
-
-  //create inode
-  inode n;
-  n.inum = inum;
-  n.size = 0;
-  for (i = 0; i < 14; i++) {
-    n.dp_used[i] = 0;
-    n.dpointers[i] = -1;
-  }
-  n.type = type;
-  if (type == MFS_DIRECTORY) {
-    n.dp_used[0] = 1;
-    n.dpointers[0] = next_block;
-    
-    build_dir_block(1, inum, pinum);
-    
-    // update file size
-    n.size += BLOCKSIZE;
-  }
-  else if (type != MFS_DIRECTORY && type != MFS_REGULAR_FILE) {
-    return -1;
-  }
-
-  // update imap
-  imap[inum] = next_block;
-
-  // write inode
-  lseek(fd, next_block*BLOCKSIZE, SEEK_SET);
-  write(fd, &n, sizeof(inode));
-  next_block++;
-  
-  // write checkpoint region
-  update_CR(inum);
-
-  return 0;
 }
-
+ 
 
 /**
  * First checks for three error cases: 1) invalid inum, 2) invalid file type,
