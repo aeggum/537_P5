@@ -390,14 +390,23 @@ itrunc(struct inode *ip)
 }
 
 // Copy stat information from inode.
+// TODO: Not working; need indirect and probably need indirect writes working
 void
 stati(struct inode *ip, struct stat *st)
 {
+  uchar checkSum = 0;
   st->dev = ip->dev;
   st->ino = ip->inum;
   st->type = ip->type;
   st->nlink = ip->nlink;
   st->size = ip->size;
+  int i;
+  for(i = 0; i < NDIRECT; i++) { // Need to XOR checkSum's of each block
+    checkSum = checkSum ^ ((ip->addrs[i] & 0xFF000000) >> SHIFT3BYTES);
+  }
+  // TODO: Need to XOR the checksums from indirect blocks too
+
+  st->checksum = checkSum;
 }
 
 // Read data from inode.
@@ -485,7 +494,18 @@ writei(struct inode *ip, char *src, uint off, uint n)
         brelse(bp);
       }
       else { // Looking at an indirect block
-        // TODO: figure out how indirect blocks work
+        // TODO: figure out how indirect blocks work, this is my best guess
+        // Didn't work on readi for indirect so I don't know if this works at all
+
+        brelse(bp); // release the old buffer full of random data outside bp->data
+        bp = bread(ip->dev, ip->addrs[NDIRECT] & 0x00FFFFFF); // get indirect block
+        uint* indir = (uint*)bp->data; // Cast the uchar[] to an array of addresses
+        /* Clear the old checksum and put in new like above */
+        /* Get the address corresponding to the block we want */
+        /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */
+        indir[off/BSIZE - NDIRECT] = indir[off/BSIZE - NDIRECT] & 0x00FFFFFF; 
+        indir[off/BSIZE - NDIRECT] = indir[off/BSIZE - NDIRECT] | (checkSum << SHIFT3BYTES);
+        bwrite(bp); // We changed stuff not actual contained in inode so write to disk
         brelse(bp); // Don't forget your release
       }
     } 
