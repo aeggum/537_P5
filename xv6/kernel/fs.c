@@ -21,6 +21,8 @@
 #include "fs.h"
 #include "file.h"
 
+#define SHIFT3BYTES 24
+
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode*);
 
@@ -422,12 +424,25 @@ readi(struct inode *ip, char *dst, uint off, uint n)
     bp = bread(ip->dev, bmap(ip, off/BSIZE));
     m = min(n - tot, BSIZE - off%BSIZE);
     memmove(dst, bp->data + off%BSIZE, m);
-    brelse(bp);
+    brelse(bp); // Not releasing here was also wrong
+
+    if(ip->type == T_CHECKED) { // Basically some ctrl-c,ctrl-v from writei
+      bp = bread(ip->dev, bmap(ip, off/BSIZE));
+      uchar checkSum = 0;
+      int i;
+      for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
+        checkSum = checkSum ^ bp->data[i];
+      }
+      brelse(bp); // Don't think we'll need this any more...
+      if(off/BSIZE < NDIRECT) { // Looking at one of our direct pointer blocks
+        if(((ip->addrs[off/BSIZE] & 0xFF000000) >> SHIFT3BYTES) != checkSum)
+          return -1; // checkSum's don't match, corrupt data
+      }
+      else { // Looking at an indirect block
+        // TODO: figure out how indirect blocks work
+      }
+    } 
   }
-  // Probably need to do checksum checking around here
-  // ip holds inode, bp holds data block we're trying to read
-  // if(ip->type == T_CHECKED) compute checksome for bp block and compare
-  // to checksum in ip (which we'll write code to create eventually)
 
   return n;
 }
@@ -456,16 +471,33 @@ writei(struct inode *ip, char *src, uint off, uint n)
     m = min(n - tot, BSIZE - off%BSIZE);
     memmove(bp->data + off%BSIZE, src, m);
     bwrite(bp);
-    brelse(bp);
-   // TODO: XOR all the data block bytes from bp store into ip->addr[off/BSIZE]
-    
+    brelse(bp); // Tried not releasing this for later use; that didn't work
+    if(ip->type == T_CHECKED) {
+      bp = bread(ip->dev, bmap(ip, off/BSIZE));
+      uchar checkSum = 0; // uchar is 1 byte? its what's used in the stat struct
+      int i;
+      for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
+        checkSum = checkSum ^ bp->data[i];
+      }
+      if(off/BSIZE < NDIRECT) { // Looking at one of our direct pointer blocks
+        ip->addrs[off/BSIZE] = ip->addrs[off/BSIZE] & 0x00FFFFFF; // clear old checksum
+        ip->addrs[off/BSIZE] = ip->addrs[off/BSIZE] | (checkSum << SHIFT3BYTES);// put in new
+        brelse(bp);
+      }
+      else { // Looking at an indirect block
+        // TODO: figure out how indirect blocks work
+        brelse(bp); // Don't forget your release
+      }
+    } 
   }
+
 
   if(n > 0 && off > ip->size){
     ip->size = off;
-    iupdate(ip);
+    //iupdate(ip);
   }
-  return n;
+  iupdate(ip);  // changed inode so we need to update it anyways, i think
+  return n;     // can't hurt right...
 }
 
 // Directories
