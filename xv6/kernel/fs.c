@@ -403,8 +403,10 @@ stati(struct inode *ip, struct stat *st)
   int i;
   for(i = 0; i < NDIRECT; i++) { // Need to XOR checkSum's of each block
     checkSum = checkSum ^ ((ip->addrs[i] & 0xFF000000) >> SHIFT3BYTES);
+    cprintf("CHECKSUMi: %d\n", ((ip->addrs[i] & 0xFF000000) >> SHIFT3BYTES));
   }
   // TODO: Need to XOR the checksums from indirect blocks too
+  cprintf("CHECKSUM: %d\n", checkSum);
 
   st->checksum = checkSum;
 }
@@ -439,11 +441,12 @@ readi(struct inode *ip, char *dst, uint off, uint n)
       bp = bread(ip->dev, bmap(ip, off/BSIZE));
       uchar checkSum = 0;
       int i;
+
+      brelse(bp); // Don't think we'll need this any more...
+      if(off/BSIZE < NDIRECT) { // Looking at one of our direct pointer blocks
       for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
         checkSum = checkSum ^ bp->data[i];
       }
-      brelse(bp); // Don't think we'll need this any more...
-      if(off/BSIZE < NDIRECT) { // Looking at one of our direct pointer blocks
         if(((ip->addrs[off/BSIZE] & 0xFF000000) >> SHIFT3BYTES) != checkSum)
           return -1; // checkSum's don't match, corrupt data
       }
@@ -455,6 +458,11 @@ readi(struct inode *ip, char *dst, uint off, uint n)
         /* Clear the old checksum and put in new like above */
         /* Get the address corresponding to the block we want */
         /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */ 
+        brelse(bp);
+        bp = bread(ip->dev, indir[off/BSIZE - NDIRECT] & 0x00FFFFFF);
+        for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
+          checkSum = checkSum ^ bp->data[i];
+        }
         if(checkSum != ((indir[off/BSIZE - NDIRECT] & 0xFF000000) >> SHIFT3BYTES)) {
           brelse(bp); // Don't forget your release
           return -1;
@@ -492,15 +500,17 @@ writei(struct inode *ip, char *src, uint off, uint n)
     bwrite(bp);
     brelse(bp); // Tried not releasing this for later use; that didn't work
     if(ip->type == T_CHECKED) {
+      //cprintf("DOING A T_CHECKED WRITEI\n");
       bp = bread(ip->dev, bmap(ip, off/BSIZE));
       uchar checkSum = 0; // uchar is 1 byte? its what's used in the stat struct
       int i;
-      for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
-        checkSum = checkSum ^ bp->data[i];
-      }
       if(off/BSIZE < NDIRECT) { // Looking at one of our direct pointer blocks
+        for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
+          checkSum = checkSum ^ bp->data[i];
+        }
         ip->addrs[off/BSIZE] = ip->addrs[off/BSIZE] & 0x00FFFFFF; // clear old checksum
         ip->addrs[off/BSIZE] = ip->addrs[off/BSIZE] | (checkSum << SHIFT3BYTES);// put in new
+        cprintf("BLOCK ADDRESS: %d\n", ip->addrs[off/BSIZE]);
         brelse(bp);
       }
       else { // Looking at an indirect block
@@ -510,9 +520,14 @@ writei(struct inode *ip, char *src, uint off, uint n)
         brelse(bp); // release the old buffer full of random data outside bp->data
         bp = bread(ip->dev, ip->addrs[NDIRECT] & 0x00FFFFFF); // get indirect block
         uint* indir = (uint*)bp->data; // Cast the uchar[] to an array of addresses
+        brelse(bp);
+        bp = bread(ip->dev, indir[off/BSIZE - NDIRECT] & 0x00FFFFFF);
         /* Clear the old checksum and put in new like above */
         /* Get the address corresponding to the block we want */
-        /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */ 
+        /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */
+        for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
+          checkSum = checkSum ^ bp->data[i];
+        } 
         indir[off/BSIZE - NDIRECT] = indir[off/BSIZE - NDIRECT] & 0x00FFFFFF; 
         indir[off/BSIZE - NDIRECT] = indir[off/BSIZE - NDIRECT] | (checkSum << SHIFT3BYTES);
         bwrite(bp); // We changed stuff not actual contained in inode so write to disk
