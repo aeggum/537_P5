@@ -340,11 +340,11 @@ bmap(struct inode *ip, uint bn)
   if(bn < NINDIRECT){
     // Load indirect block, allocating if necessary.
     if((addr = ip->addrs[NDIRECT]) == 0)
-      ip->addrs[NDIRECT] = addr = balloc(ip->dev);
+      ip->addrs[NDIRECT] = addr = balloc(ip->dev) & 0x00FFFFFF;
     bp = bread(ip->dev, addr);
     a = (uint*)bp->data;
     if((addr = a[bn]) == 0){
-      a[bn] = addr = balloc(ip->dev);
+      a[bn] = addr = balloc(ip->dev) & 0x00FFFFFF;
       bwrite(bp);
     }
     brelse(bp);
@@ -449,10 +449,20 @@ readi(struct inode *ip, char *dst, uint off, uint n)
       }
       else { // Looking at an indirect block
         // TODO: figure out how indirect blocks work
+
+        bp = bread(ip->dev, ip->addrs[NDIRECT] & 0x00FFFFFF); // get indirect block
+        uint* indir = (uint*)bp->data; // Cast the uchar[] to an array of addresses
+        /* Clear the old checksum and put in new like above */
+        /* Get the address corresponding to the block we want */
+        /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */ 
+        if(checkSum != ((indir[off/BSIZE - NDIRECT] & 0xFF000000) >> SHIFT3BYTES)) {
+          brelse(bp); // Don't forget your release
+          return -1;
+        }
+        brelse(bp); // Might need to go elsewhere
       }
     } 
   }
-
   return n;
 }
 
@@ -502,7 +512,7 @@ writei(struct inode *ip, char *src, uint off, uint n)
         uint* indir = (uint*)bp->data; // Cast the uchar[] to an array of addresses
         /* Clear the old checksum and put in new like above */
         /* Get the address corresponding to the block we want */
-        /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */
+        /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */ 
         indir[off/BSIZE - NDIRECT] = indir[off/BSIZE - NDIRECT] & 0x00FFFFFF; 
         indir[off/BSIZE - NDIRECT] = indir[off/BSIZE - NDIRECT] | (checkSum << SHIFT3BYTES);
         bwrite(bp); // We changed stuff not actual contained in inode so write to disk
