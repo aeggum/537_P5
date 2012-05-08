@@ -327,14 +327,14 @@ bmap(struct inode *ip, uint bn)
   if(bn < NDIRECT){
     addr = ip->addrs[bn];
     if(ip->type == T_CHECKED)
-      addr = addr & 0x0FFF;
+      addr = addr & 0x00FFFFFF;
     if(addr == 0)
-      ip->addrs[bn] = addr = balloc(ip->dev);
+      ip->addrs[bn] = addr = (balloc(ip->dev)) & 0x00FFFFFF;
     return addr;
   }
   bn -= NDIRECT;
 
-  // TODO: Deal with indirect block references
+  // TODO: Deal with indirect block references if type==T_CHECKED
   if(bn < NINDIRECT){
     // Load indirect block, allocating if necessary.
     if((addr = ip->addrs[NDIRECT]) == 0)
@@ -362,7 +362,7 @@ itrunc(struct inode *ip)
   struct buf *bp;
   uint *a;
 
-  //TODO: This will have to change, as well
+  //TODO: This will have to change, as well ****WHY? can't we call it as is?***
 
   for(i = 0; i < NDIRECT; i++){
     if(ip->addrs[i]){
@@ -424,6 +424,11 @@ readi(struct inode *ip, char *dst, uint off, uint n)
     memmove(dst, bp->data + off%BSIZE, m);
     brelse(bp);
   }
+  // Probably need to do checksum checking around here
+  // ip holds inode, bp holds data block we're trying to read
+  // if(ip->type == T_CHECKED) compute checksome for bp block and compare
+  // to checksum in ip (which we'll write code to create eventually)
+
   return n;
 }
 
@@ -452,19 +457,7 @@ writei(struct inode *ip, char *src, uint off, uint n)
     memmove(bp->data + off%BSIZE, src, m);
     bwrite(bp);
     brelse(bp);
-    uchar checksum = 0;
-    int i; 
-    for (i = 0; i < 512; i++) {
-      checksum ^= bp->data[i];
-    }
-    
-   
-    ip->addrs[off/BSIZE] = ip->addrs[off/BSIZE];  //not sure how to do any shifting, etc. 
-    //checksum = checksum & 0xf000;  can't do this (compiler says overflow.)
-                             //don't know if we'd want to, anyways
-    //ip->addr[off/BSIZE] = 
-    //cprintf("ip->address[off/BSIZE]: %d\n", ip->addrs[off/BSIZE]);
-   // TODO: XOR all the data block bytes from bp store into ip->addrs[off/BSIZE]
+   // TODO: XOR all the data block bytes from bp store into ip->addr[off/BSIZE]
     
   }
 
