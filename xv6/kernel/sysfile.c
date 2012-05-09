@@ -228,7 +228,7 @@ create(char *path, short type, short major, short minor)
       return ip;
     
     //return the inode if found and type is CHECKED
-    else if (type == T_CHECKED && ip->type == T_CHECKED) {
+    if (type == T_CHECKED && ip->type == T_CHECKED) {
       return ip;
     }
     iunlockput(ip);

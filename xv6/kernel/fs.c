@@ -326,31 +326,49 @@ bmap(struct inode *ip, uint bn)
 
   //TODO: Will have to change in some way when addresses are dealt with
 
-  if(bn < NDIRECT){
-    addr = ip->addrs[bn];
-    if(ip->type == T_CHECKED)
-      addr = addr & 0x00FFFFFF;
-    if(addr == 0)
-      ip->addrs[bn] = addr = (balloc(ip->dev)) & 0x00FFFFFF;
-    return addr;
-  }
-  bn -= NDIRECT;
-
-  // TODO: Deal with indirect block references if type==T_CHECKED
-  if(bn < NINDIRECT){
-    // Load indirect block, allocating if necessary.
-    if((addr = ip->addrs[NDIRECT]) == 0)
-      ip->addrs[NDIRECT] = addr = balloc(ip->dev) & 0x00FFFFFF;
-    bp = bread(ip->dev, addr);
-    a = (uint*)bp->data;
-    if((addr = a[bn]) == 0){
-      a[bn] = addr = balloc(ip->dev) & 0x00FFFFFF;
-      bwrite(bp);
+  if(ip->type == T_CHECKED) {
+    if(bn < NDIRECT){
+      if((addr = (ip->addrs[bn] & 0x00ffffff)) == 0)
+        ip->addrs[bn] = addr = balloc(ip->dev) & 0x00ffffff;
+      return addr;
     }
-    brelse(bp);
-    return addr;
-  }
+    bn -= NDIRECT;
 
+    // TODO: Deal with indirect block references if type==T_CHECKED
+    if(bn < NINDIRECT){
+      if((addr = (ip->addrs[NDIRECT] & 0x00ffffff)) == 0) // missed 0x00ffffff here
+        ip->addrs[NDIRECT] = addr = (balloc(ip->dev) & 0x00ffffff);
+      bp = bread(ip->dev, addr);
+      a = (uint*)bp->data;
+      if((addr = (a[bn]) & 0x00ffffff) == 0) { // missed 0x00ffffff here
+        a[bn] = addr = (balloc(ip->dev) & 0x00ffffff);
+        bwrite(bp);
+      }
+      brelse(bp);
+      return addr;
+    }
+  }
+  else { // Not a T_CHECKED
+    if(bn < NDIRECT){
+      if((addr = ip->addrs[bn]) == 0)
+        ip->addrs[bn] = addr = balloc(ip->dev);
+      return addr;
+    }
+    bn -= NDIRECT;
+
+    if(bn < NINDIRECT){
+      if((addr = ip->addrs[NDIRECT]) == 0)
+        ip->addrs[NDIRECT] = addr = balloc(ip->dev);
+      bp = bread(ip->dev, addr);
+      a = (uint*)bp->data;
+      if((addr = a[bn]) == 0){
+        a[bn] = addr = balloc(ip->dev);
+        bwrite(bp);
+      }
+      brelse(bp);
+      return addr;
+    }
+  }
   panic("bmap: out of range");
 }
 
@@ -400,13 +418,20 @@ stati(struct inode *ip, struct stat *st)
   st->type = ip->type;
   st->nlink = ip->nlink;
   st->size = ip->size;
+
+  checkSum = 0;
   int i;
-  for(i = 0; i < NDIRECT; i++) { // Need to XOR checkSum's of each block
-    checkSum = checkSum ^ ((ip->addrs[i] & 0xFF000000) >> SHIFT3BYTES);
-    cprintf("CHECKSUMi: %d\n", ((ip->addrs[i] & 0xFF000000) >> SHIFT3BYTES));
+  for(i = 0; i < NDIRECT; i++) { // XOR all the direct blocks checksums
+    checkSum = checkSum ^ ((ip->addrs[i] & 0xff000000) >> SHIFT3BYTES);
   }
-  // TODO: Need to XOR the checksums from indirect blocks too
-  cprintf("CHECKSUM: %d\n", checkSum);
+
+  struct buf *bp;
+  bp = bread(ip->dev, ip->addrs[NDIRECT] & 0x00ffffff); // Read indirect block
+  uint *indir;
+  indir = (uint*)bp->data; // Parse into an array of addresses
+  for(i = 0; i < 64; i++) { // Indirect block can hold 64 addresses (uint's)
+    checkSum = checkSum ^ ((indir[i] & 0xff000000) >> SHIFT3BYTES);
+  }
 
   st->checksum = checkSum;
 }
@@ -439,35 +464,26 @@ readi(struct inode *ip, char *dst, uint off, uint n)
 
     if(ip->type == T_CHECKED) { // Basically some ctrl-c,ctrl-v from writei
       bp = bread(ip->dev, bmap(ip, off/BSIZE));
-      uchar checkSum = 0;
+      uchar checkSum = bp->data[0];
       int i;
-
-      brelse(bp); // Don't think we'll need this any more...
-      if(off/BSIZE < NDIRECT) { // Looking at one of our direct pointer blocks
-      for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
+      for(i = 1; i < BSIZE; i++) { // for each byte in a block we'll XOR
         checkSum = checkSum ^ bp->data[i];
       }
-        if(((ip->addrs[off/BSIZE] & 0xFF000000) >> SHIFT3BYTES) != checkSum)
+      brelse(bp); // Don't think we'll need this any more...
+      if(off/BSIZE < NDIRECT) { // Looking at one of our direct pointer blocks
+        if(((ip->addrs[off/BSIZE] & 0xff000000) >> SHIFT3BYTES) != checkSum)
           return -1; // checkSum's don't match, corrupt data
       }
       else { // Looking at an indirect block
-        // TODO: figure out how indirect blocks work
-
-        bp = bread(ip->dev, ip->addrs[NDIRECT] & 0x00FFFFFF); // get indirect block
+        bp = bread(ip->dev, (ip->addrs[NDIRECT]) & 0x00ffffff); // get indirect block
         uint* indir = (uint*)bp->data; // Cast the uchar[] to an array of addresses
         /* Clear the old checksum and put in new like above */
         /* Get the address corresponding to the block we want */
         /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */ 
         brelse(bp);
-        bp = bread(ip->dev, indir[off/BSIZE - NDIRECT] & 0x00FFFFFF);
-        for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
-          checkSum = checkSum ^ bp->data[i];
-        }
-        if(checkSum != ((indir[off/BSIZE - NDIRECT] & 0xFF000000) >> SHIFT3BYTES)) {
-          brelse(bp); // Don't forget your release
+        if(checkSum != ((indir[(off/BSIZE) - NDIRECT]& 0xff000000) >> SHIFT3BYTES)) {
           return -1;
         }
-        brelse(bp); // Might need to go elsewhere
       }
     } 
   }
@@ -500,36 +516,24 @@ writei(struct inode *ip, char *src, uint off, uint n)
     bwrite(bp);
     brelse(bp); // Tried not releasing this for later use; that didn't work
     if(ip->type == T_CHECKED) {
-      //cprintf("DOING A T_CHECKED WRITEI\n");
       bp = bread(ip->dev, bmap(ip, off/BSIZE));
-      uchar checkSum = 0; // uchar is 1 byte? its what's used in the stat struct
+      uchar checkSum = bp->data[0]; // uchar is 1 byte? its what's used in the stat struct
       int i;
+      for(i = 1; i < BSIZE; i++) { // for each byte in a block we'll XOR
+        checkSum = checkSum ^ bp->data[i];
+      }
       if(off/BSIZE < NDIRECT) { // Looking at one of our direct pointer blocks
-        for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
-          checkSum = checkSum ^ bp->data[i];
-        }
-        ip->addrs[off/BSIZE] = ip->addrs[off/BSIZE] & 0x00FFFFFF; // clear old checksum
-        ip->addrs[off/BSIZE] = ip->addrs[off/BSIZE] | (checkSum << SHIFT3BYTES);// put in new
-        cprintf("BLOCK ADDRESS: %d\n", ip->addrs[off/BSIZE]);
+        ip->addrs[off/BSIZE] = (ip->addrs[off/BSIZE] & 0x00ffffff) | (checkSum << SHIFT3BYTES);//put in new
         brelse(bp);
       }
       else { // Looking at an indirect block
-        // TODO: figure out how indirect blocks work, this is my best guess
-        // Didn't work on readi for indirect so I don't know if this works at all
-
         brelse(bp); // release the old buffer full of random data outside bp->data
-        bp = bread(ip->dev, ip->addrs[NDIRECT] & 0x00FFFFFF); // get indirect block
+        bp = bread(ip->dev, (ip->addrs[NDIRECT] & 0x00ffffff)); // get indirect block
         uint* indir = (uint*)bp->data; // Cast the uchar[] to an array of addresses
-        brelse(bp);
-        bp = bread(ip->dev, indir[off/BSIZE - NDIRECT] & 0x00FFFFFF);
         /* Clear the old checksum and put in new like above */
         /* Get the address corresponding to the block we want */
         /* ie. if we want to look at block 13, that's indirect block 1; dir 12 == indir 0 */
-        for(i = 0; i < BSIZE; i++) { // for each byte in a block we'll XOR
-          checkSum = checkSum ^ bp->data[i];
-        } 
-        indir[off/BSIZE - NDIRECT] = indir[off/BSIZE - NDIRECT] & 0x00FFFFFF; 
-        indir[off/BSIZE - NDIRECT] = indir[off/BSIZE - NDIRECT] | (checkSum << SHIFT3BYTES);
+        indir[(off/BSIZE) - NDIRECT] = (indir[(off/BSIZE) - NDIRECT] & 0x00ffffff) | (checkSum << SHIFT3BYTES);
         bwrite(bp); // We changed stuff not actual contained in inode so write to disk
         brelse(bp); // Don't forget your release
       }
