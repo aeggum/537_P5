@@ -1,20 +1,36 @@
-I have everything set up on github.  Seems like that may make this a bit easier to deal with as a whole.
-To set up you'll need to do a few things, if you're interested.
-1. Make a github account
-2. Do the set up process, found here: http://help.github.com/linux-set-up-git/
-    --> CS already has git installed, but you'll have to do the other stuff
-3. I'll add you to the project
-4. Fork this repository anywhere you have git (like CS!) http://help.github.com/fork-a-repo/  
-   It is literally one command..SUPER easy.  
-   "git clone git@github.com:aeggum12/537_P5.git" and you have it all!
+CS 537 - Operating Systems
+Project 5
 
-Some of the git commands that may be useful:
-  - 'git add .' -- need to use this when you add a file that you want git to have.
-  - 'git commit -am MESSAGE'  -- commits the code, you give a message
-  - 'git push origin master'  -- pushes all committed code to github (any changes)
-  - 'git pull origin master'  -- pulls all code from github (any changes)
+Name: Adam Eggum
+ID: 906 075 3473
+CS: eggum
+
+Name: Matt Schleifer
+ID: 906 181 8341
+CS schleife
+
+LINUX:
+Our network file server does everything that is specified.  The client library 
+exports the interfaces in MFS.c.  The client sends packet structures to the 
+server, and the server listens on the specified port (for up to 3 seconds) until 
+a method of a specified type is received.  Most of the work takes place in lfs.c.
+
+In sending back the packet, the server uses the inum field of the server as a 
+return status, and the client checks that field to determine success or failure. 
+There are a couple files that have just one method in them, one for the client and
+one for the server.  They are separated as we do not have a header file for the client 
+or server and this way was easy enough. 
+
+We pass all of the tests, 27 out of 27.  The runtests are saved in runtests.log.
 
 
-We will have to set up another 'library', though I am not sure what this might mean this time around.  (libmfs.so)
 
-ADD A LINE
+XV6:
+We haven't started on this part of the project yet, so it probably passes 2 out
+of all of the tests.  Not too shabby. 
+We have this part mostly implemented, but we are failing 2 tests, 10 out of 12. 
+We do a checksum in writei and check the checksum in readi.  We had to add some 
+code to bmap() to get everything working as it is, including the 3-byte shift of
+the checksum.  
+
+We are passing 10 out of 12 tests. 
